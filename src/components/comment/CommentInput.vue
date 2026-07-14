@@ -1,6 +1,10 @@
 <template>
-  <div class="input-area">
-    <input v-model="content" placeholder="댓글을 입력하세요" />
+  <div class="wrapper">
+    <textarea
+      v-model="content"
+      placeholder="댓글을 입력하세요."
+      @keydown.enter.exact.prevent="submit"
+    ></textarea>
 
     <button @click="submit">작성</button>
   </div>
@@ -25,33 +29,55 @@ function submit() {
 </script>
 
 <style scoped>
-.input-area {
-  display: flex;
-
-  gap: 10px;
-
+.wrapper {
   margin-top: 20px;
 }
 
-input {
-  flex: 1;
+textarea {
+  width: 100%;
 
-  padding: 12px;
+  min-height: 30px;
+
+  padding: 14px;
 
   border: 1px solid #ddd;
 
-  border-radius: 10px;
+  border-radius: 14px;
+
+  resize: none;
+
+  font-size: 15px;
+
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  outline: none;
+
+  border-color: #3182f6;
 }
 
 button {
-  padding: 12px 20px;
+  margin-top: 10px;
+
+  float: right;
+
+  padding: 10px 22px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
   background: #3182f6;
 
   color: white;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+button:hover {
+  background: #2563eb;
 }
 </style>

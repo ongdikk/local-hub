@@ -16,7 +16,7 @@
 
         <div class="profile-info">
           <div class="author">
-            {{ post.author }}
+            {{ post.author ?? '익명' }}
           </div>
 
           <div class="date">
@@ -35,9 +35,6 @@
         {{ post.content }}
       </div>
 
-      <!-- 좋아요 -->
-      <button class="like" @click="likePost">❤️ 좋아요</button>
-
       <div class="divider"></div>
 
       <!-- 버튼 -->
@@ -49,6 +46,16 @@
         <BaseButton @click="deletePost"> 삭제 </BaseButton>
       </div>
     </article>
+
+    <!-- 액션 영역 -->
+
+    <div class="action-bar">
+      <button class="like" @click="likePost">❤️ 좋아요 {{ post.likes ?? 0 }}</button>
+
+      <div class="comment-count">💬 댓글 {{ commentStore.comments.length }}</div>
+    </div>
+
+    <div class="divider"></div>
 
     <CommentList :comments="commentStore.comments" />
 
@@ -245,7 +252,7 @@ async function addComment(content) {
 .divider {
   height: 1px;
 
-  background: #eee;
+  background: #e5e7eb;
 
   margin: 24px 0;
 }
@@ -340,5 +347,41 @@ async function addComment(content) {
   color: #8b95a1;
 
   margin-top: 3px;
+}
+
+.action-bar {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin: 25px 0;
+}
+
+.like {
+  padding: 10px 18px;
+
+  border-radius: 20px;
+
+  border: 1px solid #ddd;
+
+  background: white;
+
+  cursor: pointer;
+
+  font-size: 14px;
+}
+
+.like:hover {
+  background: #f8f8f8;
+}
+
+.comment-count {
+  color: #555;
+
+  font-size: 14px;
+
+  font-weight: 600;
 }
 </style>
