@@ -20,7 +20,7 @@ export const useBoardStore = defineStore("board", {
 
         async addPost(post) {
             
-          const newPost = await createPost(post)
+            const newPost = await createPost(post)
             this.posts.unshift(newPost)
         }
 
