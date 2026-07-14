@@ -49,6 +49,10 @@
         <BaseButton @click="deletePost"> 삭제 </BaseButton>
       </div>
     </article>
+
+    <CommentList :comments="commentStore.comments" />
+
+    <CommentInput @submit="addComment" />
   </div>
 
   <PasswordModal
@@ -72,6 +76,12 @@ import PasswordModal from '@/components/common/PasswordModal.vue'
 
 import { useBoardStore } from '@/stores/board'
 
+import CommentList from '@/components/comment/CommentList.vue'
+
+import CommentInput from '@/components/comment/CommentInput.vue'
+
+import { useCommentStore } from '@/stores/comment'
+
 const router = useRouter()
 
 const route = useRoute()
@@ -84,8 +94,12 @@ const showPasswordModal = ref(false)
 
 const actionType = ref('')
 
+const commentStore = useCommentStore()
+
 onMounted(async () => {
   post.value = await boardStore.findPost(route.params.id)
+
+  await commentStore.loadComments(route.params.id)
 
   if (!post.value) {
     router.push('/board')
@@ -150,6 +164,14 @@ function formatDate(date) {
   }
 
   return new Date(date).toLocaleString()
+}
+
+async function addComment(content) {
+  await commentStore.addComment({
+    postId: Number(route.params.id),
+
+    content,
+  })
 }
 </script>
 
