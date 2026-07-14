@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-import { getPosts, createPost, getPostById } from "@/servives/boardApi"
+import { getPosts, createPost, getPostById, updatePost } from "@/servives/boardApi"
 
 export const useBoardStore = defineStore("board", {
 
@@ -27,6 +27,23 @@ export const useBoardStore = defineStore("board", {
         async findPost(id){
 
             return await getPostById(id)
+        },
+
+        async updatePost(id, form) {
+
+            const index = this.posts.findIndex(
+                post => post.id === Number(id)
+            )
+
+            if(index === -1) return false
+
+            this.posts[index] = {
+                ...this.posts[index],
+                title: form.title,
+                content: form.content
+            }
+
+            return true
         }
 
     }

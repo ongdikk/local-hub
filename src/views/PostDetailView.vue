@@ -92,7 +92,7 @@ function goBoard(){
 
 function editPost(){
 
-    alert("STEP 8에서 구현합니다.")
+    router.push(`/edit/${route.params.id}`)
 
 }
 

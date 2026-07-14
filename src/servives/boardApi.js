@@ -64,3 +64,12 @@ export async function getPostById(id) {
     return posts.find(post => post.id === Number(id))
 
 }
+
+export async function updatePost(id, data) {
+
+  return {
+    id: Number(id),
+    ...data,
+  }
+
+}
