@@ -2,25 +2,57 @@
 
 <Header />
 
-<div class="container">
+<div class="container" v-if="post">
 
-<h1>
+    <div class="card">
 
-게시글 상세
+        <h1>
 
-</h1>
+            {{ post.title }}
 
-<p>
+        </h1>
 
-여기에 게시글 내용이 표시됩니다.
+        <div class="meta">
 
-</p>
+            <span>익명</span>
 
-<button @click="goBack">
+            <span>조회 {{ post.views }}</span>
 
-목록으로
+            <span>❤️ {{ post.likes }}</span>
 
-</button>
+        </div>
+
+        <hr>
+
+        <p class="content">
+
+            {{ post.content }}
+
+        </p>
+
+        <div class="buttons">
+
+            <BaseButton @click="goBoard">
+
+                목록으로
+
+            </BaseButton>
+
+            <BaseButton @click="editPost">
+
+                수정
+
+            </BaseButton>
+
+            <BaseButton @click="deletePost">
+
+                삭제
+
+            </BaseButton>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -28,19 +60,45 @@
 
 <script setup>
 
-import { useRouter,useRoute } from 'vue-router'
+import { ref,onMounted } from "vue"
 
-import Header from '@/components/common/Header.vue'
+import { useRouter,useRoute } from "vue-router"
 
-const router=useRouter()
+import Header from "@/components/common/Header.vue"
 
-const route=useRoute()
+import BaseButton from "@/components/common/BaseButton.vue"
 
-console.log(route.params.id)
+import { useBoardStore } from "@/stores/board"
 
-function goBack(){
+const router = useRouter()
+
+const route = useRoute()
+
+const boardStore = useBoardStore()
+
+const post = ref(null)
+
+onMounted(async()=>{
+
+    post.value = await boardStore.findPost(route.params.id)
+
+})
+
+function goBoard(){
 
     router.push("/board")
+
+}
+
+function editPost(){
+
+    alert("STEP 8에서 구현합니다.")
+
+}
+
+function deletePost(){
+
+    alert("STEP 9에서 구현합니다.")
 
 }
 
@@ -50,17 +108,49 @@ function goBack(){
 
 .container{
 
-width:900px;
+    width:900px;
 
-margin:50px auto;
+    margin:40px auto;
 
 }
 
-button{
+.card{
 
-margin-top:30px;
+    background:white;
 
-padding:12px 18px;
+    border-radius:20px;
+
+    padding:35px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.05);
+
+}
+
+.meta{
+
+    display:flex;
+
+    gap:20px;
+
+    color:#777;
+
+    margin:15px 0;
+
+}
+
+.content{
+
+    margin:30px 0;
+
+    line-height:1.8;
+
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
 
 }
 

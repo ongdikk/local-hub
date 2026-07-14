@@ -58,3 +58,9 @@ export async function createPost(post) {
     ...post,
   }
 }
+
+export async function getPostById(id) {
+
+    return posts.find(post => post.id === Number(id))
+
+}

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-import { getPosts, createPost } from "@/servives/boardApi"
+import { getPosts, createPost, getPostById } from "@/servives/boardApi"
 
 export const useBoardStore = defineStore("board", {
 
@@ -22,6 +22,11 @@ export const useBoardStore = defineStore("board", {
             
             const newPost = await createPost(post)
             this.posts.unshift(newPost)
+        },
+
+        async findPost(id){
+
+            return await getPostById(id)
         }
 
     }
