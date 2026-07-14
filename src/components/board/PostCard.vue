@@ -5,9 +5,13 @@
         <div class="avatar">👤</div>
 
         <div>
-          <div class="writer">익명</div>
+          <div class="writer">
+            {{ post.author }}
+          </div>
 
-          <div class="time">방금 전</div>
+          <div class="time">
+            {{ formatDate(post.createdAt) }}
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +29,7 @@
 
       <span> ❤️ {{ post.likes }} </span>
 
-      <span> 💬 댓글 </span>
+      <span> 💬 {{ post.commentCount }} </span>
     </div>
   </article>
 </template>
@@ -45,6 +49,24 @@ const router = useRouter()
 
 function goDetail() {
   router.push(`/post/${props.post.id}`)
+}
+
+function formatDate(date) {
+  const now = new Date()
+
+  const created = new Date(date)
+
+  const diff = Math.floor((now - created) / (1000 * 60))
+
+  if (diff < 60) {
+    return `${diff}분 전`
+  }
+
+  if (diff < 1440) {
+    return `${Math.floor(diff / 60)}시간 전`
+  }
+
+  return created.toLocaleDateString()
 }
 </script>
 

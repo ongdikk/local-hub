@@ -2,7 +2,7 @@
   <Header />
 
   <AppContainer>
-    <CategoryTabs />
+    <CategoryTabs @change="changeCategory" />
 
     <input
       class="search"
@@ -16,19 +16,11 @@
     <WriteButton />
 
     <ChatButton />
-
-    <!-- <button class="write" @click="goWrite">
-      <span class="icon"> ✎ </span>
-
-      <span> 글쓰기 </span>
-    </button> -->
   </AppContainer>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-
-import { useRouter } from 'vue-router'
 
 import Header from '@/components/common/Header.vue'
 
@@ -44,11 +36,11 @@ import WriteButton from '@/components/common/WriteButton.vue'
 
 import ChatButton from '@/components/common/ChatButton.vue'
 
-const router = useRouter()
-
 const boardStore = useBoardStore()
 
 const keyword = ref('')
+
+const selectedCategory = ref('전체')
 
 onMounted(() => {
   boardStore.loadPosts()
@@ -57,14 +49,31 @@ onMounted(() => {
 const filteredPosts = computed(() => {
   const search = keyword.value.trim().toLowerCase()
 
-  if (!search) {
-    return boardStore.posts
-  }
-
   return boardStore.posts.filter((post) => {
-    return post.title.toLowerCase().includes(search) || post.content.toLowerCase().includes(search)
+    const matchCategory =
+      selectedCategory.value === '전체' || post.category === selectedCategory.value
+
+    const matchSearch = post.title.toLowerCase().includes(search)
+
+    return matchCategory && matchSearch
   })
 })
+
+// const filteredPosts = computed(() => {
+//   const search = keyword.value.trim().toLowerCase()
+
+//   if (!search) {
+//     return boardStore.posts
+//   }
+
+//   return boardStore.posts.filter((post) => {
+//     return post.title.toLowerCase().includes(search) || post.content.toLowerCase().includes(search)
+//   })
+// })
+
+function changeCategory(category) {
+  selectedCategory.value = category
+}
 </script>
 
 <style scoped>
