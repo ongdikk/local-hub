@@ -1,38 +1,22 @@
 <template>
   <header class="header">
-    <div class="logo" @click="goHome">LocalHub</div>
+    <div class="inner">
+      <div class="brand">
+        <h1>LocalHub</h1>
 
-    <nav>
-      <div class="region">구미·경북</div>
-    </nav>
+        <p>구미·경북 지역 커뮤니티</p>
+      </div>
+    </div>
   </header>
 </template>
 
-<script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-function goHome() {
-  router.push('/board')
-}
-</script>
-
 <style scoped>
 .header {
-  height: 64px;
+  width: 100%;
 
   background: white;
 
-  border-bottom: 1px solid #eee;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 0 32px;
+  border-bottom: 1px solid #f1f3f5;
 
   position: sticky;
 
@@ -41,21 +25,43 @@ function goHome() {
   z-index: 10;
 }
 
-.logo {
-  font-size: 22px;
+.inner {
+  max-width: 900px;
 
-  font-weight: 700;
+  margin: 0 auto;
 
-  cursor: pointer;
+  padding: 18px 20px;
 }
 
-button {
-  border: none;
+.brand h1 {
+  font-size: 22px;
 
-  background: none;
+  font-weight: 800;
 
-  color: #3182f6;
+  margin: 0;
 
-  cursor: pointer;
+  color: #191f28;
+}
+
+.brand p {
+  margin-top: 4px;
+
+  font-size: 13px;
+
+  color: #8b95a1;
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: 16px;
+  }
+
+  .brand h1 {
+    font-size: 20px;
+  }
+
+  .brand p {
+    display: none;
+  }
 }
 </style>

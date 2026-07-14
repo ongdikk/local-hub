@@ -2,6 +2,8 @@
   <Header />
 
   <AppContainer>
+    <CategoryTabs />
+
     <input
       class="search"
       :value="keyword"
@@ -11,11 +13,15 @@
 
     <PostList :posts="filteredPosts" />
 
-    <button class="write" @click="goWrite">
+    <WriteButton />
+
+    <ChatButton />
+
+    <!-- <button class="write" @click="goWrite">
       <span class="icon"> ✎ </span>
 
       <span> 글쓰기 </span>
-    </button>
+    </button> -->
   </AppContainer>
 </template>
 
@@ -31,6 +37,12 @@ import AppContainer from '@/components/common/AppContainer.vue'
 import PostList from '@/components/board/PostList.vue'
 
 import { useBoardStore } from '@/stores/board'
+
+import CategoryTabs from '@/components/board/CategoryTabs.vue'
+
+import WriteButton from '@/components/common/WriteButton.vue'
+
+import ChatButton from '@/components/common/ChatButton.vue'
 
 const router = useRouter()
 
@@ -53,10 +65,6 @@ const filteredPosts = computed(() => {
     return post.title.toLowerCase().includes(search) || post.content.toLowerCase().includes(search)
   })
 })
-
-function goWrite() {
-  router.push('/write')
-}
 </script>
 
 <style scoped>
@@ -90,50 +98,6 @@ function goWrite() {
   border-color: #3182f6;
 
   box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.12);
-}
-
-.write {
-  position: fixed;
-
-  left: 50%;
-
-  bottom: 32px;
-
-  transform: translateX(-50%);
-
-  height: 52px;
-
-  padding: 0 28px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  border: none;
-
-  border-radius: 26px;
-
-  background: #3182f6;
-
-  color: white;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.write:hover {
-  transform: translateX(-50%) translateY(-3px);
 }
 
 .icon {
