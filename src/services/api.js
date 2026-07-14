@@ -1,11 +1,16 @@
-// axios를 사용할 준비를 하는 파일
+import axios from "axios"
 
-// 아직 FastAPI가 없으므로 비워둔다.
 
-// 나중에는
+const api = axios.create({
 
-// import axios from "axios"
+    baseURL:
+        import.meta.env.VITE_API_URL,
 
-// export default axios.create(...)
+    headers:{
+        "Content-Type":"application/json"
+    }
 
-export default {}
+})
+
+
+export default api
