@@ -4,17 +4,39 @@
 
 <div class="container">
 
-<h2>
+<h2>글쓰기</h2>
 
-글쓰기
+<input
 
-</h2>
+v-model="form.title"
 
-<p>
+placeholder="제목"
 
-게시글 작성 페이지입니다.
+/>
 
-</p>
+<textarea
+
+v-model="form.content"
+
+placeholder="내용"
+
+/>
+
+<input
+
+type="password"
+
+v-model="form.password"
+
+placeholder="수정 비밀번호"
+
+/>
+
+<button>
+
+등록
+
+</button>
 
 </div>
 
@@ -22,7 +44,24 @@
 
 <script setup>
 
-import Header from '@/components/common/Header.vue'
+import { reactive } from "vue"
+import { useRouter } from "vue-router"
+
+import Header from "@/components/common/Header.vue"
+import { useBoardStore } from "@/stores/board"
+
+const router = useRouter()
+const boardStore = useBoardStore()
+
+const form = reactive({
+
+    title: "",
+
+    content: "",
+
+    password: ""
+
+})
 
 </script>
 

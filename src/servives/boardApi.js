@@ -49,3 +49,12 @@ export async function getPosts(){
     return posts
 
 }
+
+export async function createPost(post) {
+  return {
+    id: Date.now(),
+    views: 0,
+    likes: 0,
+    ...post,
+  }
+}
