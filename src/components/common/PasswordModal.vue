@@ -5,51 +5,73 @@
     class="overlay"
 >
 
-    <div class="modal">
 
-        <h3>
-            {{ title }}
-        </h3>
+<div class="modal">
 
 
-        <input
-            v-model="password"
-            type="password"
-            placeholder="비밀번호 입력"
-        />
+<h3>
+{{ title }}
+</h3>
 
 
-        <div class="buttons">
 
-            <BaseButton @click="confirm">
-                확인
-            </BaseButton>
+<input
 
+v-model="password"
 
-            <BaseButton @click="close">
-                취소
-            </BaseButton>
+type="password"
 
-        </div>
+placeholder="비밀번호 입력"
+
+/>
 
 
-    </div>
+
+<div class="buttons">
+
+
+<button
+@click="confirm"
+>
+확인
+</button>
+
+
+
+<button
+@click="close"
+>
+취소
+</button>
+
+
 
 </div>
 
+
+</div>
+
+
+</div>
+
+
 </template>
+
 
 
 <script setup>
 
 import { ref } from "vue"
 
-import BaseButton from "./BaseButton.vue"
 
 
 defineProps({
 
-    visible:Boolean,
+    visible:{
+        type:Boolean,
+        default:false
+    },
+
 
     title:{
         type:String,
@@ -59,39 +81,53 @@ defineProps({
 })
 
 
+
 const emit = defineEmits([
 
     "confirm",
+
     "close"
 
 ])
 
 
+
 const password = ref("")
+
 
 
 function confirm(){
 
+
     emit(
+
         "confirm",
+
         password.value
+
     )
 
-    password.value=""
+
+    password.value = ""
 
 }
 
 
+
 function close(){
 
-    password.value=""
+
+    password.value = ""
+
 
     emit("close")
 
 }
 
 
+
 </script>
+
 
 
 <style scoped>
@@ -106,24 +142,26 @@ background:rgba(0,0,0,.4);
 
 display:flex;
 
-justify-content:center;
-
 align-items:center;
 
+justify-content:center;
+
 }
+
 
 
 .modal{
 
-width:360px;
+background:white;
 
 padding:30px;
 
-background:white;
+border-radius:16px;
 
-border-radius:18px;
+width:320px;
 
 }
+
 
 
 input{
@@ -132,13 +170,14 @@ width:100%;
 
 padding:12px;
 
-border:1px solid #ddd;
-
-border-radius:10px;
-
 margin:20px 0;
 
+border:1px solid #ddd;
+
+border-radius:8px;
+
 }
+
 
 
 .buttons{
@@ -149,5 +188,20 @@ gap:10px;
 
 }
 
+
+
+button{
+
+flex:1;
+
+padding:10px;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
 
 </style>

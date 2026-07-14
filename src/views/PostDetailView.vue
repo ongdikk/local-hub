@@ -189,69 +189,96 @@ function deletePost(){
 
 
 // 비밀번호 확인
-
 async function confirmPassword(password){
 
 
-  const result =
-    await boardStore.checkPostPassword(
+    console.log("confirmPassword 실행")
 
-      route.params.id,
-
-      password
-
+    console.log(
+        "actionType:",
+        actionType.value
     )
 
 
-  if(!result){
+    const result =
+        await boardStore.checkPostPassword(
 
-    alert(
-      "비밀번호가 일치하지 않습니다."
-    )
+            Number(route.params.id),
 
-    return
+            password
 
-  }
-
+        )
 
 
-  closeModal()
-
-
-
-  // 수정
-
-  if(actionType.value === "edit"){
-
-
-    router.push(
-      `/edit/${route.params.id}`
+    console.log(
+        "비밀번호 결과:",
+        result
     )
 
 
-  }
+
+    if(!result){
+
+        alert(
+            "비밀번호가 일치하지 않습니다."
+        )
+
+        return
+
+    }
 
 
 
-  // 삭제
+    const action =
+        actionType.value
 
-  if(actionType.value === "delete"){
 
 
-    await boardStore.removePost(
-      route.params.id
+    console.log(
+        "실행할 action:",
+        action
     )
 
 
-    router.push("/board")
+
+    closeModal()
 
 
-  }
 
+    if(action === "edit"){
+
+
+        console.log("수정 이동 실행")
+
+
+        router.push(
+            `/edit/${route.params.id}`
+        )
+
+    }
+
+
+
+    if(action === "delete"){
+
+
+        console.log("삭제 실행")
+
+
+        await boardStore.removePost(
+
+            Number(route.params.id)
+
+        )
+
+
+        router.push("/board")
+
+
+    }
 
 
 }
-
 
 
 // 모달 닫기
@@ -259,8 +286,6 @@ async function confirmPassword(password){
 function closeModal(){
 
   showPasswordModal.value = false
-
-  actionType.value = ""
 
 }
 

@@ -1,156 +1,234 @@
 <template>
-  <Header />
 
-  <div class="container">
-    <div class="card">
-      <h2>게시글 수정</h2>
+<Header />
 
-      <BaseInput
-        v-model="form.title"
-        placeholder="제목을 입력하세요."
-      />
 
-      <textarea
-        v-model="form.content"
-        class="content"
-        placeholder="내용을 입력하세요."
-      ></textarea>
+<div class="container">
 
-      <div class="button-group">
-        <BaseButton
-          @click="submit"
-          :disabled="!isValid"
-        >
-          수정하기
-        </BaseButton>
 
-        <BaseButton
-          @click="cancel"
-        >
-          취소
-        </BaseButton>
-      </div>
-    </div>
-  </div>
+<h2>
+게시글 수정
+</h2>
+
+
+
+<BaseInput
+
+v-model="form.title"
+
+placeholder="제목"
+
+ />
+
+
+
+<textarea
+
+v-model="form.content"
+
+class="content"
+
+></textarea>
+
+
+
+<div class="buttons">
+
+
+<BaseButton
+
+@click="submit"
+
+>
+
+수정하기
+
+</BaseButton>
+
+
+
+<BaseButton
+
+@click="cancel"
+
+>
+
+취소
+
+</BaseButton>
+
+
+
+</div>
+
+
+
+</div>
+
 </template>
 
+
+
 <script setup>
-import { reactive, computed, onMounted } from "vue"
-import { useRouter, useRoute } from "vue-router"
+
+import {
+    reactive,
+    onMounted
+}
+from "vue"
+
+
+
+import {
+    useRouter,
+    useRoute
+}
+from "vue-router"
+
+
 
 import Header from "@/components/common/Header.vue"
+
 import BaseInput from "@/components/common/BaseInput.vue"
+
 import BaseButton from "@/components/common/BaseButton.vue"
+
+
 
 import { useBoardStore } from "@/stores/board"
 
+
+
 const router = useRouter()
+
 const route = useRoute()
 
-const boardStore = useBoardStore()
+
+const boardStore =
+    useBoardStore()
+
+
 
 const form = reactive({
-  title: "",
-  content: ""
+
+    title:"",
+
+    content:""
+
 })
 
-const isValid = computed(() => {
-  return form.title.trim() && form.content.trim()
+
+
+
+onMounted(async()=>{
+
+
+    const post =
+        await boardStore.findPost(
+            route.params.id
+        )
+
+
+
+    if(!post){
+
+        router.push("/board")
+
+        return
+
+    }
+
+
+
+    form.title =
+        post.title
+
+
+    form.content =
+        post.content
+
+
+
 })
 
-onMounted(async () => {
 
-  const post = await boardStore.findPost(route.params.id)
 
-  if (!post) {
-    router.push("/board")
-    return
-  }
 
-  form.title = post.title
-  form.content = post.content
-})
+async function submit(){
 
-async function submit() {
 
-  await boardStore.updatePost(route.params.id, form)
+    await boardStore.updatePost(
 
-  router.push(`/post/${route.params.id}`)
+        Number(route.params.id),
+
+        form
+
+    )
+
+
+
+    router.push(
+        `/post/${route.params.id}`
+    )
+
+
 }
 
-function cancel() {
 
-  router.back()
+
+function cancel(){
+
+    router.back()
 
 }
+
+
 </script>
+
+
 
 <style scoped>
 
 .container{
 
-    max-width:900px;
+width:900px;
 
-    margin:40px auto;
+margin:50px auto;
 
-}
+display:flex;
 
-.card{
+flex-direction:column;
 
-    background:white;
-
-    border-radius:16px;
-
-    padding:32px;
-
-    box-shadow:0 4px 20px rgba(0,0,0,.06);
+gap:20px;
 
 }
 
-h2{
 
-    margin-bottom:24px;
-
-}
 
 .content{
 
-    width:100%;
+min-height:220px;
 
-    min-height:250px;
+padding:15px;
 
-    resize:none;
+resize:none;
 
-    padding:14px;
+border:1px solid #ddd;
 
-    margin-top:16px;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-    outline:none;
-
-    font-size:15px;
-
-    box-sizing:border-box;
+border-radius:10px;
 
 }
 
-.content:focus{
 
-    border-color:#3182f6;
 
-}
+.buttons{
 
-.button-group{
+display:flex;
 
-    display:flex;
-
-    gap:12px;
-
-    margin-top:24px;
+gap:10px;
 
 }
+
+
 
 </style>

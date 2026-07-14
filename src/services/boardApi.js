@@ -55,7 +55,7 @@ const posts = [
 
 export async function getPosts(){
 
-    return posts
+    return [...posts]
 
 }
 

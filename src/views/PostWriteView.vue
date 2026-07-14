@@ -1,108 +1,184 @@
 <template>
 
-  <Header />
+<Header />
 
-  <div class="container">
 
-    <h2>게시글 작성</h2>
+<div class="container">
 
-    <BaseInput
-      v-model="form.title"
-      placeholder="제목"
-    />
 
-    <textarea
-      v-model="form.content"
-      class="content"
-      placeholder="내용을 입력하세요."
-    />
+<h2>
+게시글 작성
+</h2>
 
-    <BaseInput
-      v-model="form.password"
-      type="password"
-      placeholder="수정 비밀번호"
-    />
 
-    <BaseButton 
-        :disabled="!form.title || !form.content || !form.password"    
-        @click="submitPost"
-    >
 
-      등록하기
+<BaseInput
 
-    </BaseButton>
+v-model="form.title"
 
-  </div>
+placeholder="제목"
+
+ />
+
+
+
+<textarea
+
+v-model="form.content"
+
+class="content"
+
+placeholder="내용을 입력하세요."
+
+></textarea>
+
+
+
+<BaseInput
+
+v-model="form.password"
+
+type="password"
+
+placeholder="수정 비밀번호"
+
+ />
+
+
+
+<BaseButton
+
+@click="submitPost"
+
+>
+
+등록하기
+
+</BaseButton>
+
+
+
+</div>
 
 </template>
+
+
 
 <script setup>
 
 import { reactive } from "vue"
+
 import { useRouter } from "vue-router"
 
+
+
 import Header from "@/components/common/Header.vue"
+
 import BaseInput from "@/components/common/BaseInput.vue"
+
 import BaseButton from "@/components/common/BaseButton.vue"
+
+
 
 import { useBoardStore } from "@/stores/board"
 
+
+
 const router = useRouter()
 
-const boardStore = useBoardStore()
+
+const boardStore =
+    useBoardStore()
+
+
 
 const form = reactive({
 
-    title: "",
+    title:"",
 
-    content: "",
+    content:"",
 
-    password: ""
+    password:""
 
 })
 
-function submitPost(){
 
-    boardStore.addPost({
 
-        title: form.title,
 
-        content: form.content,
+async function submitPost(){
 
-        password: form.password
+
+    if(
+        !form.title ||
+        !form.content ||
+        !form.password
+    ){
+
+        alert(
+            "모든 내용을 입력해주세요."
+        )
+
+        return
+
+    }
+
+
+
+    await boardStore.addPost({
+
+        title:form.title,
+
+        content:form.content,
+
+        password:form.password
 
     })
 
+
+
     router.push("/board")
+
 
 }
 
+
 </script>
+
+
 
 <style scoped>
 
 .container{
 
-    width:900px;
+width:900px;
 
-    margin:50px auto;
+margin:50px auto;
 
-    display:flex;
+display:flex;
 
-    flex-direction:column;
+flex-direction:column;
 
-    gap:20px;
+gap:20px;
 
 }
+
+
 
 .content{
 
-    min-height:220px;
+min-height:220px;
 
-    resize:none;
+resize:none;
 
-    padding:15px;
+padding:15px;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+font-size:15px;
 
 }
+
 
 </style>
