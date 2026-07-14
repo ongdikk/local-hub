@@ -1,9 +1,14 @@
-// import api from "./api"
+import {
+    success,
+    fail
+} from "./response"
 
-// 현재는 Mock 데이터 사용
-// FastAPI 연결 시 아래 함수 내부만 변경
 
-const posts = [
+// 현재는 Mock Data
+// FastAPI 연결 시 이 파일 내부만 axios 요청으로 변경
+
+
+let posts = [
 
     {
         id:1,
@@ -32,7 +37,7 @@ const posts = [
 
         likes:4,
 
-        password:"1111"
+        password:"2222"
 
     },
 
@@ -48,7 +53,7 @@ const posts = [
 
         likes:8,
 
-        password:"1111"
+        password:"3333"
 
     }
 
@@ -58,20 +63,18 @@ const posts = [
 
 // 게시글 전체 조회
 // GET /api/posts
+
 export async function getPosts(){
 
-    /*
-    FastAPI 연결 후
 
-    const response =
-        await api.get("/api/posts")
+    return success(
 
-    return response.data
+        [...posts],
 
-    */
+        "게시글 목록 조회 성공"
 
+    )
 
-    return [...posts]
 
 }
 
@@ -79,20 +82,9 @@ export async function getPosts(){
 
 // 게시글 작성
 // POST /api/posts
-export async function createPost(post){
 
-    /*
-    FastAPI 연결 후
+export async function createPost(data){
 
-    const response =
-        await api.post(
-            "/api/posts",
-            data
-        )
-
-    return response.data
-
-    */
 
     const newPost = {
 
@@ -102,7 +94,7 @@ export async function createPost(post){
 
         likes:0,
 
-        ...post
+        ...data
 
     }
 
@@ -110,7 +102,14 @@ export async function createPost(post){
     posts.unshift(newPost)
 
 
-    return newPost
+    return success(
+
+        newPost,
+
+        "게시글 작성 성공"
+
+    )
+
 
 }
 
@@ -118,24 +117,42 @@ export async function createPost(post){
 
 // 게시글 상세 조회
 // GET /api/posts/{id}
+
 export async function getPostById(id){
 
-    /*
-    FastAPI 연결 후
 
-    const response =
-        await api.get(
-            `/api/posts/${id}`
+    const post =
+        posts.find(
+
+            post =>
+            post.id === Number(id)
+
         )
 
-    return response.data
-
-    */
 
 
-    return posts.find(
-        post => post.id === Number(id)
+    if(!post){
+
+
+        return fail(
+
+            "게시글을 찾을 수 없습니다."
+
+        )
+
+
+    }
+
+
+
+    return success(
+
+        post,
+
+        "게시글 조회 성공"
+
     )
+
 
 }
 
@@ -143,29 +160,29 @@ export async function getPostById(id){
 
 // 게시글 수정
 // PUT /api/posts/{id}
+
 export async function updatePost(id,data){
 
-    /*
-    FastAPI 연결 후
 
-    const response =
-        await api.put(
-            `/api/posts/${id}`,
-            data
+    const index =
+        posts.findIndex(
+
+            post =>
+            post.id === Number(id)
+
         )
 
-    return response.data
-
-    */
-
-    const index = posts.findIndex(
-        post => post.id === Number(id)
-    )
 
 
     if(index === -1){
 
-        return false
+
+        return fail(
+
+            "수정할 게시글이 없습니다."
+
+        )
+
 
     }
 
@@ -173,17 +190,28 @@ export async function updatePost(id,data){
 
     posts[index] = {
 
+
         ...posts[index],
+
 
         title:data.title,
 
+
         content:data.content
+
 
     }
 
 
 
-    return posts[index]
+    return success(
+
+        posts[index],
+
+        "게시글 수정 성공"
+
+    )
+
 
 }
 
@@ -191,36 +219,52 @@ export async function updatePost(id,data){
 
 // 게시글 삭제
 // DELETE /api/posts/{id}
+
 export async function deletePost(id){
 
-    /*
-    FastAPI 연결 후
 
-    await api.delete(
-        `/api/posts/${id}`
-    )
+    const index =
+        posts.findIndex(
 
-    return true
+            post =>
+            post.id === Number(id)
 
-    */
+        )
 
-    const index = posts.findIndex(
-        post => post.id === Number(id)
-    )
 
 
     if(index === -1){
 
-        return false
+
+        return fail(
+
+            "삭제할 게시글이 없습니다."
+
+        )
+
 
     }
 
 
 
-    posts.splice(index,1)
+    posts.splice(
+
+        index,
+
+        1
+
+    )
 
 
-    return true
+
+    return success(
+
+        true,
+
+        "게시글 삭제 성공"
+
+    )
+
 
 }
 
@@ -228,38 +272,46 @@ export async function deletePost(id){
 
 // 비밀번호 확인
 // POST /api/posts/{id}/verify
+
 export async function checkPassword(id,password){
 
-    /*
-    FastAPI 연결 후
 
-    const response =
-        await api.post(
-            `/api/posts/${id}/verify`,
-            {
-                password
-            }
+    const post =
+        posts.find(
+
+            post =>
+            post.id === Number(id)
+
         )
 
-    return response.data.success
-
-    */
-   
-    const post = posts.find(
-
-        post => post.id === Number(id)
-
-    )
 
 
     if(!post){
 
-        return false
+
+        return fail(
+
+            "게시글이 없습니다."
+
+        )
+
 
     }
 
 
 
-    return post.password === password
+    const result =
+        post.password === password
+
+
+
+    return success(
+
+        result,
+
+        "비밀번호 확인 완료"
+
+    )
+
 
 }

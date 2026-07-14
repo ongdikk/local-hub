@@ -1,159 +1,244 @@
 import { defineStore } from "pinia"
 
-import { getPosts, createPost, getPostById, updatePost, deletePost, checkPassword } from "@/services/boardApi"
 
-export const useBoardStore = defineStore("board", {
+import {
 
+    getPosts,
 
-    state:()=>({
+    createPost,
 
-        posts:[]
+    updatePost,
 
-    }),
+    deletePost,
 
+    checkPassword
 
-
-    actions:{
-
-
-        // 게시글 전체 조회
-
-        async loadPosts(){
-
-
-            const data = await getPosts()
-
-
-            this.posts = data
-
-
-        },
+} from "@/services/boardApi"
 
 
 
-        // 게시글 작성
+export const useBoardStore = defineStore(
 
-        async addPost(post){
+    "board",
 
-
-            const newPost =
-                await createPost(post)
+    {
 
 
-
-            this.posts.unshift(newPost)
-
-
-        },
+        state:()=>({
 
 
-
-        // 게시글 상세 조회
-
-        async findPost(id){
+            posts:[]
 
 
-            return this.posts.find(
-                post => post.id === Number(id)
-            )
-
-
-        },
+        }),
 
 
 
-        // 게시글 수정
-
-        async updatePost(id,form){
+        actions:{
 
 
-            const updatedPost =
-                await updatePost(
-                    id,
-                    form
+
+            // 게시글 목록 조회
+
+            async loadPosts(){
+
+
+                const response =
+                    await getPosts()
+
+
+
+                if(response.success){
+
+
+                    this.posts =
+                        response.data
+
+
+                }
+
+
+            },
+
+
+
+            // 게시글 작성
+
+            async addPost(post){
+
+
+                const response =
+                    await createPost(post)
+
+
+
+                if(!response.success){
+
+
+                    return false
+
+
+                }
+
+
+
+                this.posts.unshift(
+
+                    response.data
+
                 )
 
 
 
-            if(!updatedPost){
-
-                return false
-
-            }
+                return true
 
 
+            },
 
-            const index =
-                this.posts.findIndex(
+
+
+            // 게시글 상세 조회
+
+            async findPost(id){
+
+
+                return this.posts.find(
+
                     post =>
+
                     post.id === Number(id)
-                )
-
-
-
-            if(index !== -1){
-
-                this.posts[index] =
-                    updatedPost
-
-            }
-
-
-
-            return true
-
-
-        },
-
-
-
-        // 게시글 삭제
-
-        async removePost(id){
-
-
-            const success =
-                await deletePost(id)
-
-
-
-            if(!success){
-
-                return false
-
-            }
-
-
-
-            this.posts =
-                this.posts.filter(
-
-                    post =>
-                    post.id !== Number(id)
 
                 )
 
 
-
-            return true
-
-
-        },
+            },
 
 
 
-        // 비밀번호 확인
+            // 게시글 수정
 
-        async checkPostPassword(id,password){
+            async updatePost(id,form){
 
 
-            return await checkPassword(
+                const response =
+                    await updatePost(
 
-                id,
+                        id,
 
-                password
+                        form
 
-            )
+                    )
+
+
+
+                if(!response.success){
+
+
+                    return false
+
+
+                }
+
+
+
+                const index =
+                    this.posts.findIndex(
+
+                        post =>
+
+                        post.id === Number(id)
+
+                    )
+
+
+
+                if(index !== -1){
+
+
+                    this.posts[index] =
+                        response.data
+
+
+                }
+
+
+
+                return true
+
+
+            },
+
+
+
+            // 게시글 삭제
+
+            async removePost(id){
+
+
+                const response =
+                    await deletePost(id)
+
+
+
+                if(!response.success){
+
+
+                    return false
+
+
+                }
+
+
+
+                this.posts =
+                    this.posts.filter(
+
+                        post =>
+
+                        post.id !== Number(id)
+
+                    )
+
+
+
+                return true
+
+
+            },
+
+
+
+            // 비밀번호 확인
+
+            async checkPostPassword(id,password){
+
+
+                const response =
+                    await checkPassword(
+
+                        id,
+
+                        password
+
+                    )
+
+
+
+                if(!response.success){
+
+
+                    return false
+
+
+                }
+
+
+
+                return response.data
+
+
+            }
+
 
 
         }
@@ -161,5 +246,4 @@ export const useBoardStore = defineStore("board", {
 
     }
 
-
-})
+)
