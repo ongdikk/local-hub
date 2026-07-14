@@ -1,354 +1,194 @@
 <template>
-
   <Header />
 
   <div class="container" v-if="post">
-
-    <div class="card">
-
+    <article class="post">
       <h1 class="title">
         {{ post.title }}
       </h1>
 
-
       <div class="meta">
+        <span> 👤 익명 </span>
 
-        <span>
-          익명
-        </span>
-
-        <span>
-          조회 {{ post.views }}
-        </span>
-
-        <span>
-          ❤️ {{ post.likes }}
-        </span>
-
+        <span> 조회 {{ post.views }} </span>
       </div>
-
 
       <div class="divider"></div>
 
-
       <div class="content">
-
         {{ post.content }}
-
       </div>
 
+      <div class="like">❤️ {{ post.likes }}</div>
 
-      <div class="button-group">
+      <div class="actions">
+        <BaseButton @click="goBoard"> 목록 </BaseButton>
 
-        <BaseButton
-          @click="goBoard"
-        >
-          목록
-        </BaseButton>
+        <BaseButton @click="editPost"> 수정 </BaseButton>
 
-
-        <BaseButton
-          @click="editPost"
-        >
-          수정
-        </BaseButton>
-
-
-        <BaseButton
-          @click="deletePost"
-        >
-          삭제
-        </BaseButton>
-
-
+        <BaseButton @click="deletePost"> 삭제 </BaseButton>
       </div>
-
-
-    </div>
-
-
+    </article>
   </div>
 
-
   <PasswordModal
-
     :visible="showPasswordModal"
-
-    :title="
-      actionType === 'edit'
-      ? '수정 비밀번호 확인'
-      : '삭제 비밀번호 확인'
-    "
-
+    :title="actionType === 'edit' ? '수정 비밀번호 확인' : '삭제 비밀번호 확인'"
     @confirm="confirmPassword"
-
     @close="closeModal"
-
   />
-
 </template>
 
-
 <script setup>
+import { ref, onMounted } from 'vue'
 
-import { ref, onMounted } from "vue"
+import { useRoute, useRouter } from 'vue-router'
 
-import {
-  useRouter,
-  useRoute
-} from "vue-router"
+import Header from '@/components/common/Header.vue'
 
+import BaseButton from '@/components/common/BaseButton.vue'
 
-import Header from "@/components/common/Header.vue"
+import PasswordModal from '@/components/common/PasswordModal.vue'
 
-import BaseButton from "@/components/common/BaseButton.vue"
-
-import PasswordModal from "@/components/common/PasswordModal.vue"
-
-
-import { useBoardStore } from "@/stores/board"
-
-
+import { useBoardStore } from '@/stores/board'
 
 const router = useRouter()
 
 const route = useRoute()
 
-
 const boardStore = useBoardStore()
-
-
 
 const post = ref(null)
 
-
-
-// 비밀번호 모달 상태
-
 const showPasswordModal = ref(false)
 
+const actionType = ref('')
 
-// 현재 실행할 작업
+onMounted(async () => {
+  post.value = await boardStore.findPost(route.params.id)
 
-const actionType = ref("")
-
-
-
-onMounted(async()=>{
-
-
-  post.value =
-    await boardStore.findPost(
-      route.params.id
-    )
-
-
-  if(!post.value){
-
-    router.push("/board")
-
+  if (!post.value) {
+    router.push('/board')
   }
-
-
 })
 
-
-
-// 게시판 이동
-
-function goBoard(){
-
-  router.push("/board")
-
+function goBoard() {
+  router.push('/board')
 }
 
-
-
-// 수정 클릭
-
-function editPost(){
-
-  actionType.value = "edit"
+function editPost() {
+  actionType.value = 'edit'
 
   showPasswordModal.value = true
-
 }
 
-
-
-// 삭제 클릭
-
-function deletePost(){
-
-  actionType.value = "delete"
+function deletePost() {
+  actionType.value = 'delete'
 
   showPasswordModal.value = true
-
 }
 
+async function confirmPassword(password) {
+  const result = await boardStore.checkPostPassword(
+    route.params.id,
 
+    password,
+  )
 
-// 비밀번호 확인
-async function confirmPassword(password){
+  if (!result) {
+    alert('비밀번호가 일치하지 않습니다.')
 
-    const result =
-        await boardStore.checkPostPassword(
+    return
+  }
 
-            Number(route.params.id),
+  closeModal()
 
-            password
+  if (actionType.value === 'edit') {
+    router.push(`/edit/${route.params.id}`)
+  }
 
-        )
+  if (actionType.value === 'delete') {
+    await boardStore.removePost(route.params.id)
 
-    if(!result){
-
-        alert(
-            "비밀번호가 일치하지 않습니다."
-        )
-
-        return
-
-    }
-
-
-
-    const action =
-        actionType.value
-
-
-    closeModal()
-
-
-
-    if(action === "edit"){
-
-        router.push(
-            `/edit/${route.params.id}`
-        )
-
-    }
-
-
-
-    if(action === "delete"){
-
-        await boardStore.removePost(
-
-            Number(route.params.id)
-
-        )
-
-
-        router.push("/board")
-
-
-    }
-
-
+    router.push('/board')
+  }
 }
 
-
-// 모달 닫기
-
-function closeModal(){
-
+function closeModal() {
   showPasswordModal.value = false
 
+  actionType.value = ''
 }
-
-
 </script>
 
-
-
 <style scoped>
+.container {
+  max-width: 720px;
 
-
-.container{
-
-  max-width:900px;
-
-  margin:40px auto;
-
+  margin: 40px auto;
 }
 
+.post {
+  background: white;
 
+  border-radius: 20px;
 
-.card{
-
-  background:white;
-
-  border-radius:18px;
-
-  padding:32px;
-
-  box-shadow:
-    0 4px 18px rgba(0,0,0,.06);
-
+  padding: 32px;
 }
 
+.title {
+  font-size: 28px;
 
+  font-weight: 800;
 
-.title{
-
-  font-size:28px;
-
-  font-weight:700;
-
-  margin-bottom:18px;
-
+  margin-bottom: 16px;
 }
 
+.meta {
+  display: flex;
 
+  gap: 15px;
 
-.meta{
+  color: #8b95a1;
 
-  display:flex;
-
-  gap:18px;
-
-  color:#777;
-
-  font-size:14px;
-
+  font-size: 14px;
 }
 
+.divider {
+  height: 1px;
 
+  background: #eee;
 
-.divider{
-
-  height:1px;
-
-  background:#eee;
-
-  margin:24px 0;
-
+  margin: 25px 0;
 }
 
+.content {
+  min-height: 250px;
 
+  line-height: 1.8;
 
-.content{
+  font-size: 16px;
 
-  min-height:250px;
-
-  line-height:1.8;
-
-  white-space:pre-wrap;
-
+  white-space: pre-wrap;
 }
 
+.like {
+  margin-top: 30px;
 
+  padding: 14px;
 
-.button-group{
+  background: #f7f8fa;
 
-  display:flex;
+  border-radius: 12px;
 
-  gap:12px;
-
-  margin-top:32px;
-
+  text-align: center;
 }
 
+.actions {
+  display: flex;
 
+  gap: 10px;
 
+  margin-top: 30px;
+}
 </style>

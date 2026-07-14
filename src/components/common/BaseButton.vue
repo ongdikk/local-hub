@@ -1,64 +1,49 @@
 <template>
-  <button
-    class="button"
-    :type="type"
-    :disabled="disabled"
-  >
+  <button class="button" :type="type" :disabled="disabled">
     <slot />
   </button>
 </template>
 
 <script setup>
-
 defineProps({
-
   type: {
     type: String,
-    default: "button"
+    default: 'button',
   },
 
   disabled: {
     type: Boolean,
-    default: false
-  }
-
+    default: false,
+  },
 })
-
 </script>
 
 <style scoped>
-
 .button {
+  width: 100%;
+  padding: 14px;
 
-    width: 100%;
-    padding: 14px;
+  border: none;
+  border-radius: 10px;
 
-    border: none;
-    border-radius: 10px;
+  background: #3182f6;
+  color: white;
 
-    background: #3182f6;
-    color: white;
+  font-size: 16px;
+  font-weight: 600;
 
-    font-size: 16px;
-    font-weight: 600;
+  cursor: pointer;
 
-    cursor: pointer;
-
-    transition: .2s;
+  transition: 0.2s;
 }
 
 .button:hover {
-
-    background: #2563eb;
-
+  background: #2563eb;
 }
 
 .button:disabled {
+  background: #bfc8d6;
 
-    background: #bfc8d6;
-
-    cursor: not-allowed;
-
+  cursor: not-allowed;
 }
-
 </style>

@@ -1,102 +1,61 @@
 <template>
+  <header class="header">
+    <div class="logo" @click="goHome">LocalHub</div>
 
-<header class="header">
-
-  <div 
-    class="logo"
-    @click="goHome"
-  >
-
-    LocalHub
-
-  </div>
-
-
-  <nav>
-
-    <button>
-      로그인
-    </button>
-
-  </nav>
-
-
-</header>
-
+    <nav>
+      <div class="region">구미·경북</div>
+    </nav>
+  </header>
 </template>
 
-
 <script setup>
-
-import { useRouter } from "vue-router"
-
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-
-
-function goHome(){
-
-  router.push("/board")
-
+function goHome() {
+  router.push('/board')
 }
-
 </script>
 
-
 <style scoped>
+.header {
+  height: 64px;
 
+  background: white;
 
-.header{
+  border-bottom: 1px solid #eee;
 
-  height:64px;
+  display: flex;
 
-  background:white;
+  align-items: center;
 
-  border-bottom:1px solid #eee;
+  justify-content: space-between;
 
-  display:flex;
+  padding: 0 32px;
 
-  align-items:center;
+  position: sticky;
 
-  justify-content:space-between;
+  top: 0;
 
-  padding:0 32px;
-
-  position:sticky;
-
-  top:0;
-
-  z-index:10;
-
+  z-index: 10;
 }
 
+.logo {
+  font-size: 22px;
 
+  font-weight: 700;
 
-.logo{
-
-  font-size:22px;
-
-  font-weight:700;
-
-  cursor:pointer;
-
+  cursor: pointer;
 }
 
+button {
+  border: none;
 
+  background: none;
 
-button{
+  color: #3182f6;
 
-  border:none;
-
-  background:none;
-
-  color:#3182f6;
-
-  cursor:pointer;
-
+  cursor: pointer;
 }
-
-
-
 </style>

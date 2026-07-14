@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LoginView from '@/views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
 import BoardView from '@/views/BoardView.vue'
 import PostDetailView from '@/views/PostDetailView.vue'
 import PostWriteView from '@/views/PostWriteView.vue'
@@ -14,16 +12,6 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/board',
-    },
-
-    {
-      path: '/login',
-      component: LoginView,
-    },
-
-    {
-      path: '/signup',
-      component: SignupView,
     },
 
     {
