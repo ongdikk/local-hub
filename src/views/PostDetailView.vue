@@ -1,7 +1,7 @@
 <template>
   <Header />
 
-  <div class="container" v-if="post">
+  <AppContainer v-if="post">
     <article class="post">
       <h1 class="title">
         {{ post.title }}
@@ -29,7 +29,7 @@
         <BaseButton @click="deletePost"> 삭제 </BaseButton>
       </div>
     </article>
-  </div>
+  </AppContainer>
 
   <PasswordModal
     :visible="showPasswordModal"
@@ -45,6 +45,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import Header from '@/components/common/Header.vue'
+
+import AppContainer from '@/components/common/AppContainer.vue'
 
 import BaseButton from '@/components/common/BaseButton.vue'
 
@@ -120,13 +122,75 @@ function closeModal() {
 </script>
 
 <style scoped>
-.container {
-  max-width: 720px;
+.card {
+  background: white;
 
-  margin: 40px auto;
+  border-radius: 18px;
+
+  padding: 32px;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
 }
 
-.post {
+.title {
+  font-size: 28px;
+
+  font-weight: 700;
+
+  margin-bottom: 18px;
+}
+
+.meta {
+  display: flex;
+
+  gap: 18px;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.divider {
+  height: 1px;
+
+  background: #eee;
+
+  margin: 24px 0;
+}
+
+.content {
+  min-height: 250px;
+
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+}
+
+.button-group {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 32px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+
+    border-radius: 14px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+}
+
+/* .post {
   background: white;
 
   border-radius: 20px;
@@ -188,5 +252,5 @@ function closeModal() {
   gap: 10px;
 
   margin-top: 30px;
-}
+} */
 </style>

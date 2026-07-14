@@ -1,17 +1,19 @@
 <template>
   <Header />
 
-  <div class="container">
+  <AppContainer>
     <h2>게시글 작성</h2>
 
     <PostForm :showPassword="true" buttonText="등록하기" @submit="submitPost" @cancel="cancel" />
-  </div>
+  </AppContainer>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 
 import Header from '@/components/common/Header.vue'
+
+import AppContainer from '@/components/common/AppContainer.vue'
 
 import PostForm from '@/components/board/PostForm.vue'
 
@@ -33,11 +35,3 @@ function cancel() {
   router.back()
 }
 </script>
-
-<style scoped>
-.container {
-  max-width: 720px;
-
-  margin: 40px auto;
-}
-</style>

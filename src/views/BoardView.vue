@@ -1,31 +1,13 @@
 <template>
   <Header />
 
-  <div class="container">
-    <!-- 지역 타이틀 -->
-
-    <section class="intro">
-      <h1>LocalHub</h1>
-
-      <p>구미·경북 지역 이야기를 공유해보세요.</p>
-    </section>
-
-    <!-- 검색 -->
-
+  <AppContainer>
     <input class="search" v-model="keyword" placeholder="🔍 지역 정보를 검색해보세요." />
 
-    <!-- 게시글 영역 -->
+    <PostList :posts="filteredPosts" />
 
-    <section>
-      <div class="section-title">최신 이야기</div>
-
-      <PostList :posts="filteredPosts" />
-    </section>
-
-    <!-- 작성 버튼 -->
-
-    <button class="write" @click="goWrite">✏️</button>
-  </div>
+    <button class="write" @click="goWrite">+</button>
+  </AppContainer>
 </template>
 
 <script setup>
@@ -34,6 +16,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import Header from '@/components/common/Header.vue'
+
+import AppContainer from '@/components/common/AppContainer.vue'
 
 import PostList from '@/components/board/PostList.vue'
 
@@ -59,68 +43,40 @@ function goWrite() {
 </script>
 
 <style scoped>
-.container {
-  max-width: 720px;
-
-  margin: 40px auto;
-
-  padding-bottom: 100px;
-}
-
-.intro {
-  margin-bottom: 30px;
-}
-
-.intro h1 {
-  font-size: 32px;
-
-  font-weight: 800;
-
-  margin-bottom: 8px;
-}
-
-.intro p {
-  color: #6b7684;
-
-  font-size: 15px;
-}
-
 .search {
   width: 100%;
 
-  padding: 16px 20px;
+  height: 52px;
+
+  padding: 0 18px;
 
   border: none;
 
-  border-radius: 14px;
+  border-radius: 16px;
 
-  background: white;
+  background: #f5f6f8;
 
   font-size: 15px;
 
-  margin-bottom: 30px;
+  box-sizing: border-box;
 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
 }
 
-.section-title {
-  font-size: 18px;
-
-  font-weight: 700;
-
-  margin-bottom: 16px;
+.search:focus {
+  outline: 2px solid #3182f6;
 }
 
 .write {
   position: fixed;
 
-  right: 40px;
+  right: 30px;
 
-  bottom: 40px;
+  bottom: 30px;
 
-  width: 64px;
+  width: 60px;
 
-  height: 64px;
+  height: 60px;
 
   border: none;
 
@@ -130,10 +86,22 @@ function goWrite() {
 
   color: white;
 
-  font-size: 24px;
+  font-size: 32px;
 
   cursor: pointer;
+}
 
-  box-shadow: 0 8px 20px rgba(49, 130, 246, 0.3);
+@media (max-width: 768px) {
+  .write {
+    right: 20px;
+
+    bottom: 20px;
+
+    width: 54px;
+
+    height: 54px;
+
+    font-size: 28px;
+  }
 }
 </style>
