@@ -1,80 +1,102 @@
 <template>
-  <header class="header">
 
-    <div class="logo">
-      LocalHub
-    </div>
+<header class="header">
 
-    <nav>
+  <div 
+    class="logo"
+    @click="goHome"
+  >
 
-      <RouterLink to="/board">
-        게시판
-      </RouterLink>
+    LocalHub
 
-      <RouterLink to="/login">
-        로그인
-      </RouterLink>
+  </div>
 
-    </nav>
 
-  </header>
+  <nav>
+
+    <button>
+      로그인
+    </button>
+
+  </nav>
+
+
+</header>
+
 </template>
 
+
 <script setup>
+
+import { useRouter } from "vue-router"
+
+
+const router = useRouter()
+
+
+
+function goHome(){
+
+  router.push("/board")
+
+}
+
 </script>
+
 
 <style scoped>
 
+
 .header{
 
-    height:70px;
+  height:64px;
 
-    background:white;
+  background:white;
 
-    display:flex;
+  border-bottom:1px solid #eee;
 
-    justify-content:space-between;
+  display:flex;
 
-    align-items:center;
+  align-items:center;
 
-    padding:0 40px;
+  justify-content:space-between;
 
-    box-shadow:0 2px 10px rgba(0,0,0,.05);
+  padding:0 32px;
+
+  position:sticky;
+
+  top:0;
+
+  z-index:10;
 
 }
+
+
 
 .logo{
 
-    font-size:24px;
+  font-size:22px;
 
-    font-weight:bold;
+  font-weight:700;
 
-    color:#3182f6;
-
-}
-
-nav{
-
-    display:flex;
-
-    gap:30px;
+  cursor:pointer;
 
 }
 
-a{
 
-    text-decoration:none;
 
-    color:#444;
+button{
 
-    font-weight:600;
+  border:none;
 
-}
+  background:none;
 
-.router-link-active{
+  color:#3182f6;
 
-    color:#3182f6;
+  cursor:pointer;
 
 }
+
+
 
 </style>
