@@ -1,5 +1,5 @@
 <template>
-  <button class="button" :type="type" :disabled="disabled">
+  <button class="button" :type="type" :disabled="disabled" @click="$emit('click')">
     <slot />
   </button>
 </template>
@@ -8,28 +8,36 @@
 defineProps({
   type: {
     type: String,
+
     default: 'button',
   },
 
   disabled: {
     type: Boolean,
+
     default: false,
   },
 })
+
+defineEmits(['click'])
 </script>
 
 <style scoped>
 .button {
   width: 100%;
+
   padding: 14px;
 
   border: none;
+
   border-radius: 10px;
 
   background: #3182f6;
+
   color: white;
 
   font-size: 16px;
+
   font-weight: 600;
 
   cursor: pointer;

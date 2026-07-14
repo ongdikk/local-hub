@@ -9,41 +9,37 @@
 </template>
 
 <script setup>
-
 defineProps({
   modelValue: {
     type: String,
-    default: ""
+    default: '',
   },
 
   type: {
     type: String,
-    default: "text"
+    default: 'text',
   },
 
   placeholder: {
     type: String,
-    default: ""
-  }
+    default: '',
+  },
 })
 
-defineEmits([
-  "update:modelValue"
-])
-
+defineEmits(['update:modelValue'])
 </script>
 
 <style scoped>
 .input {
-    width:100%;
-    padding:14px;
-    border-radius:10px;
-    border:1px solid #ddd;
-    outline:none;
-    font-size:15px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 15px;
 }
 
-.input:focus{
-    border-color:#3182f6;
+.input:focus {
+  border-color: #3182f6;
 }
 </style>

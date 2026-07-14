@@ -6,67 +6,54 @@
       <slot />
 
       <div class="buttons">
-        <BaseButton @click="$emit('confirm')">
-          확인
-        </BaseButton>
+        <BaseButton @click="$emit('confirm')"> 확인 </BaseButton>
 
-        <BaseButton @click="$emit('close')">
-          취소
-        </BaseButton>
+        <BaseButton @click="$emit('close')"> 취소 </BaseButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import BaseButton from "./BaseButton.vue"
+import BaseButton from './BaseButton.vue'
 
 defineProps({
   visible: Boolean,
   title: {
     type: String,
-    default: ""
-  }
+    default: '',
+  },
 })
 
-defineEmits([
-  "confirm",
-  "close"
-])
+defineEmits(['confirm', 'close'])
 </script>
 
 <style scoped>
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
 
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal{
+.modal {
+  width: 420px;
 
-    width:420px;
+  background: white;
 
-    background:white;
+  border-radius: 18px;
 
-    border-radius:18px;
-
-    padding:28px;
-
+  padding: 28px;
 }
 
-.buttons{
+.buttons {
+  display: flex;
 
-    display:flex;
+  gap: 12px;
 
-    gap:12px;
-
-    margin-top:20px;
-
+  margin-top: 20px;
 }
-
 </style>

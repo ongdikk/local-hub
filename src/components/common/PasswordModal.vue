@@ -1,207 +1,109 @@
 <template>
+  <div v-if="visible" class="overlay">
+    <div class="modal">
+      <h3>
+        {{ title }}
+      </h3>
 
-<div
-    v-if="visible"
-    class="overlay"
->
+      <input v-model="password" type="password" placeholder="비밀번호 입력" />
 
+      <div class="buttons">
+        <button @click="confirm">확인</button>
 
-<div class="modal">
-
-
-<h3>
-{{ title }}
-</h3>
-
-
-
-<input
-
-v-model="password"
-
-type="password"
-
-placeholder="비밀번호 입력"
-
-/>
-
-
-
-<div class="buttons">
-
-
-<button
-@click="confirm"
->
-확인
-</button>
-
-
-
-<button
-@click="close"
->
-취소
-</button>
-
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
+        <button @click="close">취소</button>
+      </div>
+    </div>
+  </div>
 </template>
 
-
-
 <script setup>
-
-import { ref } from "vue"
-
-
+import { ref } from 'vue'
 
 defineProps({
+  visible: {
+    type: Boolean,
+    default: false,
+  },
 
-    visible:{
-        type:Boolean,
-        default:false
-    },
-
-
-    title:{
-        type:String,
-        default:"비밀번호 확인"
-    }
-
+  title: {
+    type: String,
+    default: '비밀번호 확인',
+  },
 })
 
+const emit = defineEmits(['confirm', 'close'])
 
+const password = ref('')
 
-const emit = defineEmits([
+function confirm() {
+  emit(
+    'confirm',
 
-    "confirm",
+    password.value,
+  )
 
-    "close"
-
-])
-
-
-
-const password = ref("")
-
-
-
-function confirm(){
-
-
-    emit(
-
-        "confirm",
-
-        password.value
-
-    )
-
-
-    password.value = ""
-
+  password.value = ''
 }
 
+function close() {
+  password.value = ''
 
-
-function close(){
-
-
-    password.value = ""
-
-
-    emit("close")
-
+  emit('close')
 }
-
-
-
 </script>
 
-
-
 <style scoped>
+.overlay {
+  position: fixed;
 
-.overlay{
+  inset: 0;
 
-position:fixed;
+  background: rgba(0, 0, 0, 0.4);
 
-inset:0;
+  display: flex;
 
-background:rgba(0,0,0,.4);
+  align-items: center;
 
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
+  justify-content: center;
 }
 
+.modal {
+  background: white;
 
+  padding: 30px;
 
-.modal{
+  border-radius: 16px;
 
-background:white;
-
-padding:30px;
-
-border-radius:16px;
-
-width:320px;
-
+  width: 320px;
 }
 
+input {
+  width: 100%;
 
+  padding: 12px;
 
-input{
+  margin: 20px 0;
 
-width:100%;
+  border: 1px solid #ddd;
 
-padding:12px;
-
-margin:20px 0;
-
-border:1px solid #ddd;
-
-border-radius:8px;
-
+  border-radius: 8px;
 }
 
+.buttons {
+  display: flex;
 
-
-.buttons{
-
-display:flex;
-
-gap:10px;
-
+  gap: 10px;
 }
 
+button {
+  flex: 1;
 
+  padding: 10px;
 
-button{
+  border: none;
 
-flex:1;
+  border-radius: 8px;
 
-padding:10px;
-
-border:none;
-
-border-radius:8px;
-
-cursor:pointer;
-
+  cursor: pointer;
 }
-
 </style>

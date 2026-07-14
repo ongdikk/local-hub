@@ -1,184 +1,43 @@
 <template>
+  <Header />
 
-<Header />
+  <div class="container">
+    <h2>게시글 작성</h2>
 
-
-<div class="container">
-
-
-<h2>
-게시글 작성
-</h2>
-
-
-
-<BaseInput
-
-v-model="form.title"
-
-placeholder="제목"
-
- />
-
-
-
-<textarea
-
-v-model="form.content"
-
-class="content"
-
-placeholder="내용을 입력하세요."
-
-></textarea>
-
-
-
-<BaseInput
-
-v-model="form.password"
-
-type="password"
-
-placeholder="수정 비밀번호"
-
- />
-
-
-
-<BaseButton
-
-@click="submitPost"
-
->
-
-등록하기
-
-</BaseButton>
-
-
-
-</div>
-
+    <PostForm :showPassword="true" buttonText="등록하기" @submit="submitPost" @cancel="cancel" />
+  </div>
 </template>
 
-
-
 <script setup>
+import { useRouter } from 'vue-router'
 
-import { reactive } from "vue"
+import Header from '@/components/common/Header.vue'
 
-import { useRouter } from "vue-router"
+import PostForm from '@/components/board/PostForm.vue'
 
-
-
-import Header from "@/components/common/Header.vue"
-
-import BaseInput from "@/components/common/BaseInput.vue"
-
-import BaseButton from "@/components/common/BaseButton.vue"
-
-
-
-import { useBoardStore } from "@/stores/board"
-
-
+import { useBoardStore } from '@/stores/board'
 
 const router = useRouter()
 
+const boardStore = useBoardStore()
 
-const boardStore =
-    useBoardStore()
+async function submitPost(data) {
+  const result = await boardStore.addPost(data)
 
-
-
-const form = reactive({
-
-    title:"",
-
-    content:"",
-
-    password:""
-
-})
-
-
-
-
-async function submitPost(){
-
-
-    if(
-        !form.title ||
-        !form.content ||
-        !form.password
-    ){
-
-        alert(
-            "모든 내용을 입력해주세요."
-        )
-
-        return
-
-    }
-
-
-
-    await boardStore.addPost({
-
-        title:form.title,
-
-        content:form.content,
-
-        password:form.password
-
-    })
-
-
-
-    router.push("/board")
-
-
+  if (result) {
+    router.push('/board')
+  }
 }
 
-
+function cancel() {
+  router.back()
+}
 </script>
 
-
-
 <style scoped>
+.container {
+  max-width: 720px;
 
-.container{
-
-width:900px;
-
-margin:50px auto;
-
-display:flex;
-
-flex-direction:column;
-
-gap:20px;
-
+  margin: 40px auto;
 }
-
-
-
-.content{
-
-min-height:220px;
-
-resize:none;
-
-padding:15px;
-
-border:1px solid #ddd;
-
-border-radius:10px;
-
-font-size:15px;
-
-}
-
-
 </style>

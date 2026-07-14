@@ -116,8 +116,6 @@ async function confirmPassword(password) {
 
 function closeModal() {
   showPasswordModal.value = false
-
-  actionType.value = ''
 }
 </script>
 
