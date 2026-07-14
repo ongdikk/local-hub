@@ -73,3 +73,17 @@ export async function updatePost(id, data) {
   }
 
 }
+
+export async function deletePost(id){
+
+    const index = posts.findIndex(
+        post => post.id === Number(id)
+    )
+
+    if(index === -1) return false
+
+    posts.splice(index,1)
+
+    return true
+
+}

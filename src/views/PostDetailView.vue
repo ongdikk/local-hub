@@ -1,114 +1,97 @@
 <template>
+  <Header />
 
-<Header />
-
-<div class="container" v-if="post">
-
+  <div class="container" v-if="post">
     <div class="card">
+      <h1 class="title">
+        {{ post.title }}
+      </h1>
 
-        <h1>
+      <div class="meta">
+        <span>익명</span>
+        <span>조회 {{ post.views }}</span>
+        <span>❤️ {{ post.likes }}</span>
+      </div>
 
-            {{ post.title }}
+      <div class="divider"></div>
 
-        </h1>
+      <div class="content">
+        {{ post.content }}
+      </div>
 
-        <div class="meta">
+      <div class="button-group">
+        <BaseButton @click="goBoard">
+          목록
+        </BaseButton>
 
-            <span>익명</span>
+        <BaseButton @click="editPost">
+          수정
+        </BaseButton>
 
-            <span>조회 {{ post.views }}</span>
-
-            <span>❤️ {{ post.likes }}</span>
-
-        </div>
-
-        <hr>
-
-        <p class="content">
-
-            {{ post.content }}
-
-        </p>
-
-        <div class="buttons">
-
-            <BaseButton @click="goBoard">
-
-                목록으로
-
-            </BaseButton>
-
-            <BaseButton @click="editPost">
-
-                수정
-
-            </BaseButton>
-
-            <BaseButton @click="deletePost">
-
-                삭제
-
-            </BaseButton>
-
-        </div>
-
+        <BaseButton @click="deletePost">
+          삭제
+        </BaseButton>
+      </div>
     </div>
-
-</div>
-
+  </div>
 </template>
 
 <script setup>
-
-import { ref,onMounted } from "vue"
-
-import { useRouter,useRoute } from "vue-router"
+import { ref, onMounted } from "vue"
+import { useRouter, useRoute } from "vue-router"
 
 import Header from "@/components/common/Header.vue"
-
 import BaseButton from "@/components/common/BaseButton.vue"
 
 import { useBoardStore } from "@/stores/board"
 
 const router = useRouter()
-
 const route = useRoute()
 
 const boardStore = useBoardStore()
 
 const post = ref(null)
 
-onMounted(async()=>{
+onMounted(async () => {
 
-    post.value = await boardStore.findPost(route.params.id)
+  post.value = await boardStore.findPost(route.params.id)
+
+  if (!post.value) {
+    router.push("/board")
+  }
 
 })
 
-function goBoard(){
+function goBoard() {
 
-    router.push("/board")
-
-}
-
-function editPost(){
-
-    router.push(`/edit/${route.params.id}`)
+  router.push("/board")
 
 }
 
-function deletePost(){
+function editPost() {
 
-    alert("STEP 9에서 구현합니다.")
+  router.push(`/edit/${route.params.id}`)
 
 }
 
+async function deletePost() {
+
+  const ok = confirm("게시글을 삭제하시겠습니까?")
+
+  if (!ok) return
+
+  await boardStore.removePost(route.params.id)
+
+  router.push("/board")
+
+}
 </script>
 
 <style scoped>
 
 .container{
 
-    width:900px;
+    max-width:900px;
 
     margin:40px auto;
 
@@ -118,11 +101,21 @@ function deletePost(){
 
     background:white;
 
-    border-radius:20px;
+    border-radius:18px;
 
-    padding:35px;
+    padding:32px;
 
-    box-shadow:0 3px 12px rgba(0,0,0,.05);
+    box-shadow:0 4px 18px rgba(0,0,0,.06);
+
+}
+
+.title{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
 
 }
 
@@ -130,27 +123,41 @@ function deletePost(){
 
     display:flex;
 
-    gap:20px;
+    gap:18px;
 
     color:#777;
 
-    margin:15px 0;
+    font-size:14px;
+
+}
+
+.divider{
+
+    height:1px;
+
+    background:#eee;
+
+    margin:24px 0;
 
 }
 
 .content{
 
-    margin:30px 0;
+    min-height:250px;
 
     line-height:1.8;
 
+    white-space:pre-wrap;
+
 }
 
-.buttons{
+.button-group{
 
     display:flex;
 
-    gap:15px;
+    gap:12px;
+
+    margin-top:32px;
 
 }
 

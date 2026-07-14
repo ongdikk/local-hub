@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-import { getPosts, createPost, getPostById, updatePost } from "@/servives/boardApi"
+import { getPosts, createPost, getPostById, updatePost, deletePost } from "@/servives/boardApi"
 
 export const useBoardStore = defineStore("board", {
 
@@ -44,6 +44,20 @@ export const useBoardStore = defineStore("board", {
             }
 
             return true
+        },
+
+        async removePost(id){
+
+            const success = await deletePost(id)
+
+            if(!success) return false
+
+            this.posts = this.posts.filter(
+                post => post.id !== Number(id)
+            )
+
+            return true
+
         }
 
     }
