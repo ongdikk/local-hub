@@ -191,15 +191,6 @@ function deletePost(){
 // 비밀번호 확인
 async function confirmPassword(password){
 
-
-    console.log("confirmPassword 실행")
-
-    console.log(
-        "actionType:",
-        actionType.value
-    )
-
-
     const result =
         await boardStore.checkPostPassword(
 
@@ -208,14 +199,6 @@ async function confirmPassword(password){
             password
 
         )
-
-
-    console.log(
-        "비밀번호 결과:",
-        result
-    )
-
-
 
     if(!result){
 
@@ -233,23 +216,11 @@ async function confirmPassword(password){
         actionType.value
 
 
-
-    console.log(
-        "실행할 action:",
-        action
-    )
-
-
-
     closeModal()
 
 
 
     if(action === "edit"){
-
-
-        console.log("수정 이동 실행")
-
 
         router.push(
             `/edit/${route.params.id}`
@@ -260,10 +231,6 @@ async function confirmPassword(password){
 
 
     if(action === "delete"){
-
-
-        console.log("삭제 실행")
-
 
         await boardStore.removePost(
 
