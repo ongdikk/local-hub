@@ -1,27 +1,47 @@
 <template>
   <Header />
 
-  <AppContainer v-if="post">
-    <article class="post">
+  <div class="container" v-if="post">
+    <article class="card">
+      <!-- 카테고리 -->
+
+      <div class="category">
+        {{ post.category }}
+      </div>
+
+      <!-- 작성자 영역 -->
+
+      <div class="profile">
+        <div class="avatar">👤</div>
+
+        <div class="profile-info">
+          <div class="author">
+            {{ post.author }}
+          </div>
+
+          <div class="date">
+            {{ formatDate(post.createdAt) }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 제목 -->
       <h1 class="title">
         {{ post.title }}
       </h1>
 
-      <div class="meta">
-        <span> 👤 익명 </span>
-
-        <span> 조회 {{ post.views }} </span>
-      </div>
-
-      <div class="divider"></div>
-
+      <!-- 내용 -->
       <div class="content">
         {{ post.content }}
       </div>
 
-      <div class="like">❤️ {{ post.likes }}</div>
+      <!-- 좋아요 -->
+      <button class="like" @click="likePost">❤️ 좋아요</button>
 
-      <div class="actions">
+      <div class="divider"></div>
+
+      <!-- 버튼 -->
+      <div class="button-group">
         <BaseButton @click="goBoard"> 목록 </BaseButton>
 
         <BaseButton @click="editPost"> 수정 </BaseButton>
@@ -29,7 +49,7 @@
         <BaseButton @click="deletePost"> 삭제 </BaseButton>
       </div>
     </article>
-  </AppContainer>
+  </div>
 
   <PasswordModal
     :visible="showPasswordModal"
@@ -42,11 +62,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 import Header from '@/components/common/Header.vue'
-
-import AppContainer from '@/components/common/AppContainer.vue'
 
 import BaseButton from '@/components/common/BaseButton.vue'
 
@@ -118,36 +136,88 @@ async function confirmPassword(password) {
 
 function closeModal() {
   showPasswordModal.value = false
+
+  actionType.value = ''
+}
+
+function likePost() {
+  alert('좋아요 기능 준비중')
+}
+
+function formatDate(date) {
+  if (!date) {
+    return ''
+  }
+
+  return new Date(date).toLocaleString()
 }
 </script>
 
 <style scoped>
+.container {
+  max-width: 900px;
+
+  margin: 40px auto;
+}
+
 .card {
   background: white;
 
-  border-radius: 18px;
+  border-radius: 20px;
 
   padding: 32px;
 
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.category {
+  display: inline-block;
+
+  background: #eef4ff;
+
+  color: #3182f6;
+
+  padding: 6px 12px;
+
+  border-radius: 14px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 26px;
 
-  font-weight: 700;
+  font-weight: 800;
 
-  margin-bottom: 18px;
+  line-height: 1.4;
+
+  margin-bottom: 20px;
 }
 
 .meta {
   display: flex;
 
-  gap: 18px;
+  gap: 15px;
 
-  color: #777;
+  color: #8b95a1;
 
   font-size: 14px;
+}
+
+.stats {
+  margin-top: 16px;
+
+  display: flex;
+
+  gap: 18px;
+
+  font-size: 14px;
+
+  color: #555;
 }
 
 .divider {
@@ -163,94 +233,90 @@ function closeModal() {
 
   line-height: 1.8;
 
-  white-space: pre-wrap;
-}
-
-.button-group {
-  display: flex;
-
-  gap: 12px;
-
-  margin-top: 32px;
-}
-
-@media (max-width: 768px) {
-  .card {
-    padding: 20px;
-
-    border-radius: 14px;
-  }
-
-  .title {
-    font-size: 22px;
-  }
-
-  .button-group {
-    flex-direction: column;
-  }
-}
-
-/* .post {
-  background: white;
-
-  border-radius: 20px;
-
-  padding: 32px;
-}
-
-.title {
-  font-size: 28px;
-
-  font-weight: 800;
-
-  margin-bottom: 16px;
-}
-
-.meta {
-  display: flex;
-
-  gap: 15px;
-
-  color: #8b95a1;
-
-  font-size: 14px;
-}
-
-.divider {
-  height: 1px;
-
-  background: #eee;
-
-  margin: 25px 0;
-}
-
-.content {
-  min-height: 250px;
-
-  line-height: 1.8;
-
   font-size: 16px;
 
   white-space: pre-wrap;
 }
 
 .like {
-  margin-top: 30px;
+  margin-top: 25px;
 
-  padding: 14px;
+  padding: 12px 20px;
 
-  background: #f7f8fa;
+  border-radius: 20px;
 
-  border-radius: 12px;
+  border: 1px solid #ddd;
 
-  text-align: center;
+  background: white;
+
+  cursor: pointer;
 }
 
-.actions {
+.button-group {
   display: flex;
 
-  gap: 10px;
+  gap: 12px;
+}
 
-  margin-top: 30px;
-} */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+
+.profile {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #f2f4f6;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 20px;
+}
+
+.profile-info {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.author {
+  font-weight: 600;
+
+  font-size: 15px;
+}
+
+.date {
+  font-size: 13px;
+
+  color: #8b95a1;
+
+  margin-top: 3px;
+}
 </style>
