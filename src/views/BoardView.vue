@@ -2,11 +2,20 @@
   <Header />
 
   <AppContainer>
-    <input class="search" v-model="keyword" placeholder="🔍 지역 정보를 검색해보세요." />
+    <input
+      class="search"
+      :value="keyword"
+      @input="keyword = $event.target.value"
+      placeholder="🔍 지역 정보를 검색해보세요."
+    />
 
     <PostList :posts="filteredPosts" />
 
-    <button class="write" @click="goWrite">+</button>
+    <button class="write" @click="goWrite">
+      <span class="icon"> ✎ </span>
+
+      <span> 글쓰기 </span>
+    </button>
   </AppContainer>
 </template>
 
@@ -34,7 +43,15 @@ onMounted(() => {
 })
 
 const filteredPosts = computed(() => {
-  return boardStore.posts.filter((post) => post.title.includes(keyword.value))
+  const search = keyword.value.trim().toLowerCase()
+
+  if (!search) {
+    return boardStore.posts
+  }
+
+  return boardStore.posts.filter((post) => {
+    return post.title.toLowerCase().includes(search) || post.content.toLowerCase().includes(search)
+  })
 })
 
 function goWrite() {
@@ -46,11 +63,9 @@ function goWrite() {
 .search {
   width: 100%;
 
-  height: 52px;
+  height: 54px;
 
-  padding: 0 18px;
-
-  border: none;
+  padding: 0 20px;
 
   border-radius: 16px;
 
@@ -60,48 +75,82 @@ function goWrite() {
 
   box-sizing: border-box;
 
+  transition: 0.2s;
+
   margin-bottom: 30px;
 }
 
+.search::placeholder {
+  color: #9ca3af;
+}
+
 .search:focus {
-  outline: 2px solid #3182f6;
+  outline: none;
+
+  border-color: #3182f6;
+
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.12);
 }
 
 .write {
   position: fixed;
 
-  right: 30px;
+  left: 50%;
 
-  bottom: 30px;
+  bottom: 32px;
 
-  width: 60px;
+  transform: translateX(-50%);
 
-  height: 60px;
+  height: 52px;
+
+  padding: 0 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
 
   border: none;
 
-  border-radius: 50%;
+  border-radius: 26px;
 
   background: #3182f6;
 
   color: white;
 
-  font-size: 32px;
+  font-size: 15px;
+
+  font-weight: 600;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 
   cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.write:hover {
+  transform: translateX(-50%) translateY(-3px);
+}
+
+.icon {
+  font-size: 18px;
+
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
   .write {
-    right: 20px;
-
     bottom: 20px;
 
-    width: 54px;
+    height: 48px;
 
-    height: 54px;
+    padding: 0 22px;
 
-    font-size: 28px;
+    font-size: 14px;
   }
 }
 </style>
