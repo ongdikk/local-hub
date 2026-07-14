@@ -38,43 +38,31 @@ class="write"
 
 <script setup>
 
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref,onMounted,computed } from "vue"
 
-import Header from '@/components/common/Header.vue'
-import PostList from '@/components/board/PostList.vue'
+import { useRouter } from "vue-router"
+
+import Header from "@/components/common/Header.vue"
+
+import PostList from "@/components/board/PostList.vue"
+
+import { useBoardStore } from "@/stores/board"
 
 const router = useRouter()
 
+const boardStore = useBoardStore()
+
 const keyword = ref("")
 
-const posts = [
-    {
-        id:1,
-        title:"구미역 근처 맛집 추천",
-        content:"혼밥 가능한 곳 추천 부탁드립니다.",
-        views:35,
-        likes:12
-    },
-    {
-        id:2,
-        title:"금오산 야경 좋네요",
-        content:"오늘 날씨가 좋아서 산책하기 딱입니다.",
-        views:17,
-        likes:4
-    },
-    {
-        id:3,
-        title:"구미 중앙시장 주차",
-        content:"주말에 주차 자리 괜찮나요?",
-        views:41,
-        likes:8
-    }
-]
+onMounted(()=>{
+
+    boardStore.loadPosts()
+
+})
 
 const filteredPosts = computed(()=>{
 
-    return posts.filter(post=>{
+    return boardStore.posts.filter(post=>{
 
         return post.title.includes(keyword.value)
 
