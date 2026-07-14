@@ -16,6 +16,10 @@
       </div>
     </div>
 
+    <!-- <div class="category">
+      {{ post.category }}
+    </div> -->
+
     <h3 class="title">
       {{ post.title }}
     </h3>
@@ -178,4 +182,22 @@ function formatDate(date) {
     font-size: 17px;
   }
 }
+
+/* .category {
+  display: inline-block;
+
+  background: #eef4ff;
+
+  color: #3182f6;
+
+  padding: 5px 10px;
+
+  border-radius: 12px;
+
+  font-size: 12px;
+
+  margin-bottom: 10px;
+
+  font-weight: 600;
+} */
 </style>

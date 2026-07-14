@@ -61,22 +61,38 @@ export async function getPosts() {
 export async function createPost(data) {
   const newPost = {
     id: Date.now(),
-
     views: 0,
-
     likes: 0,
+    commentCount: 0,
+    author: '익명',
+    createdAt: new Date().toISOString(),
 
     ...data,
   }
 
   posts.unshift(newPost)
 
-  return success(
-    newPost,
-
-    '게시글 작성 성공',
-  )
+  return success(newPost, '게시글 작성 성공')
 }
+// export async function createPost(data) {
+//   const newPost = {
+//     id: Date.now(),
+
+//     views: 0,
+
+//     likes: 0,
+
+//     ...data,
+//   }
+
+//   posts.unshift(newPost)
+
+//   return success(
+//     newPost,
+
+//     '게시글 작성 성공',
+//   )
+// }
 
 // 게시글 상세 조회
 // GET /api/posts/{id}
