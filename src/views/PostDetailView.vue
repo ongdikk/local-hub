@@ -1,164 +1,362 @@
 <template>
+
   <Header />
 
   <div class="container" v-if="post">
+
     <div class="card">
+
       <h1 class="title">
         {{ post.title }}
       </h1>
 
+
       <div class="meta">
-        <span>익명</span>
-        <span>조회 {{ post.views }}</span>
-        <span>❤️ {{ post.likes }}</span>
+
+        <span>
+          익명
+        </span>
+
+        <span>
+          조회 {{ post.views }}
+        </span>
+
+        <span>
+          ❤️ {{ post.likes }}
+        </span>
+
       </div>
+
 
       <div class="divider"></div>
 
+
       <div class="content">
+
         {{ post.content }}
+
       </div>
 
+
       <div class="button-group">
-        <BaseButton @click="goBoard">
+
+        <BaseButton
+          @click="goBoard"
+        >
           목록
         </BaseButton>
 
-        <BaseButton @click="editPost">
+
+        <BaseButton
+          @click="editPost"
+        >
           수정
         </BaseButton>
 
-        <BaseButton @click="deletePost">
+
+        <BaseButton
+          @click="deletePost"
+        >
           삭제
         </BaseButton>
+
+
       </div>
+
+
     </div>
+
+
   </div>
+
+
+  <PasswordModal
+
+    :visible="showPasswordModal"
+
+    :title="
+      actionType === 'edit'
+      ? '수정 비밀번호 확인'
+      : '삭제 비밀번호 확인'
+    "
+
+    @confirm="confirmPassword"
+
+    @close="closeModal"
+
+  />
+
 </template>
 
+
 <script setup>
+
 import { ref, onMounted } from "vue"
-import { useRouter, useRoute } from "vue-router"
+
+import {
+  useRouter,
+  useRoute
+} from "vue-router"
+
 
 import Header from "@/components/common/Header.vue"
+
 import BaseButton from "@/components/common/BaseButton.vue"
+
+import PasswordModal from "@/components/common/PasswordModal.vue"
+
 
 import { useBoardStore } from "@/stores/board"
 
+
+
 const router = useRouter()
+
 const route = useRoute()
+
 
 const boardStore = useBoardStore()
 
+
+
 const post = ref(null)
 
-onMounted(async () => {
 
-  post.value = await boardStore.findPost(route.params.id)
 
-  if (!post.value) {
+// 비밀번호 모달 상태
+
+const showPasswordModal = ref(false)
+
+
+// 현재 실행할 작업
+
+const actionType = ref("")
+
+
+
+onMounted(async()=>{
+
+
+  post.value =
+    await boardStore.findPost(
+      route.params.id
+    )
+
+
+  if(!post.value){
+
     router.push("/board")
+
   }
+
 
 })
 
-function goBoard() {
+
+
+// 게시판 이동
+
+function goBoard(){
 
   router.push("/board")
 
 }
 
-function editPost() {
 
-  router.push(`/edit/${route.params.id}`)
+
+// 수정 클릭
+
+function editPost(){
+
+  actionType.value = "edit"
+
+  showPasswordModal.value = true
+
+}
+
+
+
+// 삭제 클릭
+
+function deletePost(){
+
+  actionType.value = "delete"
+
+  showPasswordModal.value = true
 
 }
 
-async function deletePost() {
 
-  const ok = confirm("게시글을 삭제하시겠습니까?")
 
-  if (!ok) return
+// 비밀번호 확인
 
-  await boardStore.removePost(route.params.id)
+async function confirmPassword(password){
 
-  router.push("/board")
+
+  const result =
+    await boardStore.checkPostPassword(
+
+      route.params.id,
+
+      password
+
+    )
+
+
+  if(!result){
+
+    alert(
+      "비밀번호가 일치하지 않습니다."
+    )
+
+    return
+
+  }
+
+
+
+  closeModal()
+
+
+
+  // 수정
+
+  if(actionType.value === "edit"){
+
+
+    router.push(
+      `/edit/${route.params.id}`
+    )
+
+
+  }
+
+
+
+  // 삭제
+
+  if(actionType.value === "delete"){
+
+
+    await boardStore.removePost(
+      route.params.id
+    )
+
+
+    router.push("/board")
+
+
+  }
+
+
 
 }
+
+
+
+// 모달 닫기
+
+function closeModal(){
+
+  showPasswordModal.value = false
+
+  actionType.value = ""
+
+}
+
+
 </script>
+
+
 
 <style scoped>
 
+
 .container{
 
-    max-width:900px;
+  max-width:900px;
 
-    margin:40px auto;
+  margin:40px auto;
 
 }
+
+
 
 .card{
 
-    background:white;
+  background:white;
 
-    border-radius:18px;
+  border-radius:18px;
 
-    padding:32px;
+  padding:32px;
 
-    box-shadow:0 4px 18px rgba(0,0,0,.06);
+  box-shadow:
+    0 4px 18px rgba(0,0,0,.06);
 
 }
+
+
 
 .title{
 
-    font-size:28px;
+  font-size:28px;
 
-    font-weight:700;
+  font-weight:700;
 
-    margin-bottom:18px;
+  margin-bottom:18px;
 
 }
+
+
 
 .meta{
 
-    display:flex;
+  display:flex;
 
-    gap:18px;
+  gap:18px;
 
-    color:#777;
+  color:#777;
 
-    font-size:14px;
+  font-size:14px;
 
 }
+
+
 
 .divider{
 
-    height:1px;
+  height:1px;
 
-    background:#eee;
+  background:#eee;
 
-    margin:24px 0;
+  margin:24px 0;
 
 }
+
+
 
 .content{
 
-    min-height:250px;
+  min-height:250px;
 
-    line-height:1.8;
+  line-height:1.8;
 
-    white-space:pre-wrap;
+  white-space:pre-wrap;
 
 }
+
+
 
 .button-group{
 
-    display:flex;
+  display:flex;
 
-    gap:12px;
+  gap:12px;
 
-    margin-top:32px;
+  margin-top:32px;
 
 }
+
+
 
 </style>

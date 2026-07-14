@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-import { getPosts, createPost, getPostById, updatePost, deletePost } from "@/servives/boardApi"
+import { getPosts, createPost, getPostById, updatePost, deletePost, checkPassword } from "@/servives/boardApi"
 
 export const useBoardStore = defineStore("board", {
 
@@ -58,7 +58,13 @@ export const useBoardStore = defineStore("board", {
 
             return true
 
-        }
+        },
+
+        async checkPostPassword(id,password){
+
+            return await checkPassword(id,password)
+
+        }        
 
     }
 

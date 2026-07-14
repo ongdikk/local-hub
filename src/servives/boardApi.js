@@ -1,7 +1,6 @@
 const posts = [
 
     {
-
         id:1,
 
         title:"구미역 근처 맛집 추천",
@@ -10,12 +9,14 @@ const posts = [
 
         views:35,
 
-        likes:12
+        likes:12,
+
+        password:"1111"
 
     },
 
-    {
 
+    {
         id:2,
 
         title:"금오산 야경 좋네요",
@@ -24,12 +25,14 @@ const posts = [
 
         views:17,
 
-        likes:4
+        likes:4,
+
+        password:"1111"
 
     },
 
-    {
 
+    {
         id:3,
 
         title:"중앙시장 주차 질문",
@@ -38,11 +41,17 @@ const posts = [
 
         views:41,
 
-        likes:8
+        likes:8,
+
+        password:"1111"
 
     }
 
 ]
+
+
+
+// 게시글 전체 조회
 
 export async function getPosts(){
 
@@ -50,40 +59,131 @@ export async function getPosts(){
 
 }
 
-export async function createPost(post) {
-  return {
-    id: Date.now(),
-    views: 0,
-    likes: 0,
-    ...post,
-  }
+
+
+// 게시글 작성
+
+export async function createPost(post){
+
+
+    const newPost = {
+
+        id:Date.now(),
+
+        views:0,
+
+        likes:0,
+
+        ...post
+
+    }
+
+
+    posts.unshift(newPost)
+
+
+    return newPost
+
 }
 
-export async function getPostById(id) {
 
-    return posts.find(post => post.id === Number(id))
 
-}
+// 게시글 상세 조회
 
-export async function updatePost(id, data) {
+export async function getPostById(id){
 
-  return {
-    id: Number(id),
-    ...data,
-  }
+
+    return posts.find(
+        post => post.id === Number(id)
+    )
 
 }
 
-export async function deletePost(id){
+
+
+// 게시글 수정
+
+export async function updatePost(id,data){
+
 
     const index = posts.findIndex(
         post => post.id === Number(id)
     )
 
-    if(index === -1) return false
+
+    if(index === -1){
+
+        return false
+
+    }
+
+
+
+    posts[index] = {
+
+        ...posts[index],
+
+        title:data.title,
+
+        content:data.content
+
+    }
+
+
+
+    return posts[index]
+
+}
+
+
+
+// 게시글 삭제
+
+export async function deletePost(id){
+
+
+    const index = posts.findIndex(
+        post => post.id === Number(id)
+    )
+
+
+    if(index === -1){
+
+        return false
+
+    }
+
+
 
     posts.splice(index,1)
 
+
     return true
+
+}
+
+
+
+// 비밀번호 확인
+
+export async function checkPassword(id,password){
+
+
+    const post = posts.find(
+
+        post => post.id === Number(id)
+
+    )
+
+
+    if(!post){
+
+        return false
+
+    }
+
+
+
+    return post.password === password
 
 }
