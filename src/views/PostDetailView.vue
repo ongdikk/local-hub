@@ -50,7 +50,10 @@
     <!-- 액션 영역 -->
 
     <div class="action-bar">
-      <button class="like" @click="likePost">❤️ 좋아요 {{ post.likes ?? 0 }}</button>
+      <button class="like" :class="{ active: liked }" @click="likePost">
+        {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
+        {{ post.likes }}
+      </button>
 
       <div class="comment-count">💬 댓글 {{ commentStore.comments.length }}</div>
     </div>
@@ -102,6 +105,8 @@ const showPasswordModal = ref(false)
 const actionType = ref('')
 
 const commentStore = useCommentStore()
+
+const liked = ref(false)
 
 onMounted(async () => {
   post.value = await boardStore.findPost(route.params.id)
@@ -161,8 +166,20 @@ function closeModal() {
   actionType.value = ''
 }
 
-function likePost() {
-  alert('좋아요 기능 준비중')
+async function likePost() {
+  // alert('좋아요 기능 준비중')
+
+  liked.value = !liked.value
+
+  const success = await boardStore.toggleLike(
+    route.params.id,
+
+    liked.value,
+  )
+
+  if (success) {
+    post.value = await boardStore.findPost(route.params.id)
+  }
 }
 
 function formatDate(date) {
@@ -383,5 +400,11 @@ async function addComment(content) {
   font-size: 14px;
 
   font-weight: 600;
+}
+
+.like.active {
+  background: #fee2e2;
+
+  border-color: #fecaca;
 }
 </style>

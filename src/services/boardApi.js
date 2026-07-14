@@ -70,6 +70,7 @@ export async function createPost(data) {
     ...data,
   }
 
+  // API 연결 시에는 삭제
   posts.unshift(newPost)
 
   return success(newPost, '게시글 작성 성공')
@@ -176,4 +177,20 @@ export async function checkPassword(id, password) {
 
     '비밀번호 확인 완료',
   )
+}
+
+export async function toggleLike(id, liked) {
+  const post = posts.find((post) => post.id === Number(id))
+
+  if (!post) {
+    return false
+  }
+
+  if (liked) {
+    post.likes += 1
+  } else {
+    post.likes -= 1
+  }
+
+  return success(post, '좋아요 변경 성공')
 }

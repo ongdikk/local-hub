@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 
-import { getPosts, createPost, updatePost, deletePost, checkPassword } from '@/services/boardApi'
+import {
+  getPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  checkPassword,
+  toggleLike,
+} from '@/services/boardApi'
 
 export const useBoardStore = defineStore(
   'board',
@@ -101,6 +108,22 @@ export const useBoardStore = defineStore(
         }
 
         return response.data
+      },
+
+      async toggleLike(id, liked) {
+        const response = await toggleLike(id, liked)
+
+        if (!response) {
+          return false
+        }
+
+        const index = this.posts.findIndex((post) => post.id === Number(id))
+
+        if (index !== -1) {
+          this.posts[index] = response.data
+        }
+
+        return true
       },
     },
   },
