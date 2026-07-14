@@ -1,43 +1,63 @@
 <template>
-
-<button class="btn">
-
+  <button
+    class="button"
+    :type="type"
+    :disabled="disabled"
+  >
     <slot />
-
-</button>
-
+  </button>
 </template>
 
 <script setup>
+
+defineProps({
+
+  type: {
+    type: String,
+    default: "button"
+  },
+
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+
+})
+
 </script>
 
 <style scoped>
 
-.btn{
+.button {
 
-    padding:12px 22px;
+    width: 100%;
+    padding: 14px;
 
-    border:none;
+    border: none;
+    border-radius: 10px;
 
-    border-radius:10px;
+    background: #3182f6;
+    color: white;
 
-    background:#3182f6;
+    font-size: 16px;
+    font-weight: 600;
 
-    color:white;
+    cursor: pointer;
 
-    cursor:pointer;
+    transition: .2s;
+}
 
-    font-size:15px;
+.button:hover {
 
-    font-weight:bold;
-
-    transition:.2s;
+    background: #2563eb;
 
 }
 
-.btn:hover{
+.button:disabled {
 
-    background:#1b64d8;
+    background: #bfc8d6;
+
+    cursor: not-allowed;
 
 }
 

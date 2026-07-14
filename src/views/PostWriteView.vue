@@ -1,44 +1,38 @@
 <template>
 
-<Header />
+  <Header />
 
-<div class="container">
+  <div class="container">
 
-<h2>글쓰기</h2>
+    <h2>게시글 작성</h2>
 
-<input
+    <BaseInput
+      v-model="form.title"
+      placeholder="제목"
+    />
 
-v-model="form.title"
+    <textarea
+      v-model="form.content"
+      class="content"
+      placeholder="내용을 입력하세요."
+    />
 
-placeholder="제목"
+    <BaseInput
+      v-model="form.password"
+      type="password"
+      placeholder="수정 비밀번호"
+    />
 
-/>
+    <BaseButton 
+        :disabled="!form.title || !form.content || !form.password"    
+        @click="submitPost"
+    >
 
-<textarea
+      등록하기
 
-v-model="form.content"
+    </BaseButton>
 
-placeholder="내용"
-
-/>
-
-<input
-
-type="password"
-
-v-model="form.password"
-
-placeholder="수정 비밀번호"
-
-/>
-
-<button>
-
-등록
-
-</button>
-
-</div>
+  </div>
 
 </template>
 
@@ -48,9 +42,13 @@ import { reactive } from "vue"
 import { useRouter } from "vue-router"
 
 import Header from "@/components/common/Header.vue"
+import BaseInput from "@/components/common/BaseInput.vue"
+import BaseButton from "@/components/common/BaseButton.vue"
+
 import { useBoardStore } from "@/stores/board"
 
 const router = useRouter()
+
 const boardStore = useBoardStore()
 
 const form = reactive({
@@ -63,15 +61,47 @@ const form = reactive({
 
 })
 
+function submitPost(){
+
+    boardStore.addPost({
+
+        title: form.title,
+
+        content: form.content,
+
+        password: form.password
+
+    })
+
+    router.push("/board")
+
+}
+
 </script>
 
 <style scoped>
 
 .container{
 
-width:900px;
+    width:900px;
 
-margin:50px auto;
+    margin:50px auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.content{
+
+    min-height:220px;
+
+    resize:none;
+
+    padding:15px;
 
 }
 
