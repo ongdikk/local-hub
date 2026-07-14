@@ -82,7 +82,7 @@ function goWrite(){
 
 .container{
 
-    width:900px;
+    max-width:720px;
 
     margin:40px auto;
 
@@ -92,15 +92,20 @@ function goWrite(){
 
     width:100%;
 
-    padding:16px;
+    padding:16px 20px;
 
-    border:none;
+    background:white;
 
     border-radius:14px;
 
-    margin-bottom:30px;
+    border:none;
 
-    font-size:16px;
+    font-size:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.04);
 
 }
 

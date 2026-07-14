@@ -1,29 +1,62 @@
 <template>
 
-<div>
 
-<PostCard
+<div class="list">
 
-v-for="post in posts"
 
-:key="post.id"
+  <PostCard
 
-:post="post"
+    v-for="post in posts"
 
-/>
+    :key="post.id"
+
+    :post="post"
+
+  />
+
 
 </div>
 
+
 </template>
+
+
 
 <script setup>
 
-import PostCard from './PostCard.vue'
+
+import PostCard from "./PostCard.vue"
+
+
 
 defineProps({
 
-    posts:Array
+  posts:{
+
+    type:Array,
+
+    default:()=>[]
+
+  }
+
 
 })
 
+
 </script>
+
+
+
+<style scoped>
+
+
+.list{
+
+
+  width:100%;
+
+
+}
+
+
+</style>
