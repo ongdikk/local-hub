@@ -25,8 +25,6 @@
     </p>
 
     <div class="footer">
-      <span> 👁 {{ post.views }} </span>
-
       <span> ❤️ {{ post.likes ?? 0 }} </span>
 
       <span> 💬 {{ post.commentCount ?? 0 }} </span>

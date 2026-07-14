@@ -11,7 +11,6 @@ const posts = [
     category: '맛집',
     author: '익명',
     createdAt: '2026-07-14T12:30:00',
-    views: 35,
     likes: 12,
     commentCount: 4,
     password: '1111',
@@ -24,7 +23,6 @@ const posts = [
     category: '관광',
     author: '익명',
     createdAt: '2026-07-13T20:10:00',
-    views: 17,
     likes: 4,
     commentCount: 1,
     password: '1111',
@@ -37,7 +35,6 @@ const posts = [
     category: '생활',
     author: '익명',
     createdAt: '2026-07-12T09:20:00',
-    views: 41,
     likes: 8,
     commentCount: 6,
     password: '1111',
@@ -61,7 +58,6 @@ export async function getPosts() {
 export async function createPost(data) {
   const newPost = {
     id: Date.now(),
-    views: 0,
     likes: 0,
     commentCount: 0,
     author: '익명',
@@ -78,8 +74,6 @@ export async function createPost(data) {
 // export async function createPost(data) {
 //   const newPost = {
 //     id: Date.now(),
-
-//     views: 0,
 
 //     likes: 0,
 
