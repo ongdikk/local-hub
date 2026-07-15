@@ -7,6 +7,7 @@ import {
   deletePost,
   checkPassword,
   toggleLike,
+  increaseView,
 } from '@/services/boardApi'
 
 export const useBoardStore = defineStore(
@@ -29,19 +30,6 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 작성
-
-      // async addPost(post) {
-      //   const response = await createPost(post)
-
-      //   if (!response.success) {
-      //     return false
-      //   }
-
-      //   this.posts.unshift(response.data)
-
-      //   return true
-      // },
-
       async addPost(post) {
         const response = await createPost(post)
 
@@ -53,13 +41,11 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 상세 조회
-
       async findPost(id) {
         return this.posts.find((post) => post.id === Number(id))
       },
 
       // 게시글 수정
-
       async updatePost(id, form) {
         const response = await updatePost(
           id,
@@ -81,7 +67,6 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 삭제
-
       async removePost(id) {
         const response = await deletePost(id)
 
@@ -95,7 +80,6 @@ export const useBoardStore = defineStore(
       },
 
       // 비밀번호 확인
-
       async checkPostPassword(id, password) {
         const response = await checkPassword(
           id,
@@ -110,8 +94,26 @@ export const useBoardStore = defineStore(
         return response.data
       },
 
+      // 좋아요 토글
       async toggleLike(id, liked) {
         const response = await toggleLike(id, liked)
+
+        if (!response) {
+          return false
+        }
+
+        const index = this.posts.findIndex((post) => post.id === Number(id))
+
+        if (index !== -1) {
+          this.posts[index] = response.data
+        }
+
+        return true
+      },
+
+      // 조회수 증가
+      async increaseView(id) {
+        const response = await increaseView(id)
 
         if (!response) {
           return false

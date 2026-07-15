@@ -109,13 +109,17 @@ const commentStore = useCommentStore()
 const liked = ref(false)
 
 onMounted(async () => {
+  await boardStore.increaseView(route.params.id)
+  
   post.value = await boardStore.findPost(route.params.id)
 
-  await commentStore.loadComments(route.params.id)
+  // await commentStore.loadComments(route.params.id)
 
   if (!post.value) {
     router.push('/board')
   }
+
+  await commentStore.loadComments(route.params.id)
 })
 
 function goBoard() {
@@ -162,13 +166,9 @@ async function confirmPassword(password) {
 
 function closeModal() {
   showPasswordModal.value = false
-
-  actionType.value = ''
 }
 
 async function likePost() {
-  // alert('좋아요 기능 준비중')
-
   liked.value = !liked.value
 
   const success = await boardStore.toggleLike(

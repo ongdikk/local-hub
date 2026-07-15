@@ -46,7 +46,6 @@ const posts = [
 
 // 게시글 전체 조회
 // GET /api/posts
-
 export async function getPosts() {
   return success(
     [...posts],
@@ -57,7 +56,6 @@ export async function getPosts() {
 
 // 게시글 작성
 // POST /api/posts
-
 export async function createPost(data) {
   const newPost = {
     id: Date.now(),
@@ -75,27 +73,9 @@ export async function createPost(data) {
 
   return success(newPost, '게시글 작성 성공')
 }
-// export async function createPost(data) {
-//   const newPost = {
-//     id: Date.now(),
-
-//     likes: 0,
-
-//     ...data,
-//   }
-
-//   posts.unshift(newPost)
-
-//   return success(
-//     newPost,
-
-//     '게시글 작성 성공',
-//   )
-// }
 
 // 게시글 상세 조회
 // GET /api/posts/{id}
-
 export async function getPostById(id) {
   const post = posts.find((post) => post.id === Number(id))
 
@@ -112,7 +92,6 @@ export async function getPostById(id) {
 
 // 게시글 수정
 // PUT /api/posts/{id}
-
 export async function updatePost(id, data) {
   const index = posts.findIndex((post) => post.id === Number(id))
 
@@ -137,7 +116,6 @@ export async function updatePost(id, data) {
 
 // 게시글 삭제
 // DELETE /api/posts/{id}
-
 export async function deletePost(id) {
   const index = posts.findIndex((post) => post.id === Number(id))
 
@@ -160,7 +138,6 @@ export async function deletePost(id) {
 
 // 비밀번호 확인
 // POST /api/posts/{id}/verify
-
 export async function checkPassword(id, password) {
   const post = posts.find((post) => post.id === Number(id))
 
@@ -191,4 +168,16 @@ export async function toggleLike(id, liked) {
   }
 
   return success(post, '좋아요 변경 성공')
+}
+
+export async function increaseView(id) {
+  const post = posts.find((post) => post.id === Number(id))
+
+  if (!post) {
+    return false
+  }
+
+  post.views += 1
+
+  return success(post, '조회수 증가 성공')
 }
