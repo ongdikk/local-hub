@@ -12,7 +12,7 @@
 
   margin: 0 auto;
 
-  padding: 40px 20px;
+  padding: 40px 32px;
 
   box-sizing: border-box;
 }
@@ -21,7 +21,17 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 24px 16px;
+    margin: 20px auto;
+
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .title {
+    font-size: 22px;
   }
 }
 </style>

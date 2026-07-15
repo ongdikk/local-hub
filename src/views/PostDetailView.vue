@@ -5,8 +5,10 @@
     <article class="card">
       <!-- 카테고리 -->
 
-      <div class="category">
-        {{ post.category }}
+      <div v-if="post.tags?.length" class="tags">
+        <span v-for="tag in post.tags" :key="tag" class="tag">
+          #{{ tag }}
+        </span>
       </div>
 
       <!-- 작성자 영역 -->
@@ -16,11 +18,11 @@
 
         <div class="profile-info">
           <div class="author">
-            {{ post.author ?? '익명' }}
+            익명
           </div>
 
           <div class="date">
-            {{ formatDate(post.createdAt) }}
+            {{ formatDate(post.created_at) }}
           </div>
         </div>
       </div>
@@ -33,6 +35,11 @@
       <!-- 내용 -->
       <div class="content">
         {{ post.content }}
+      </div>
+
+      <div v-if="post.image_urls?.length" class="images">
+        <img v-for="image in post.image_urls"
+          :key="image" :src="image" class="image"/>
       </div>
 
       <div class="divider"></div>
@@ -50,12 +57,34 @@
     <!-- 액션 영역 -->
 
     <div class="action-bar">
-      <button class="like" :class="{ active: liked }" @click="likePost">
-        {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
-        {{ post.likes }}
-      </button>
+      
+      <div class="left-actions">
+        <div class="action-item" @click="likePost" :class="{ active: liked }">
+          {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
+          {{ post.likes }}
+        </div>
 
-      <div class="comment-count">💬 댓글 {{ commentStore.comments.length }}</div>
+        <!-- <button class="like" :class="{ active: liked }" @click="likePost">
+          {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
+          {{ post.likes }}
+        </button> -->
+
+        <div class="divider-vertical"></div>
+
+        <div class="action-item" @click="bookmarkPost" :class="{ active: bookmarked }">
+          {{ bookmarked ? '🔖 저장 취소' : '📑 저장' }}
+          {{ post.bookmarks }}
+        </div>
+
+        <!-- <button class="bookmark" :class="{ active: bookmarked }" @click="bookmarkPost">
+          {{ bookmarked ? '🔖 저장 취소' : '📑 저장' }}
+          {{ post.bookmarks }}
+        </button> -->
+      </div>
+
+      <div class="comment-count">
+        💬 댓글 {{ commentStore.comments.length }}
+      </div>
     </div>
 
     <div class="divider"></div>
@@ -107,6 +136,8 @@ const actionType = ref('')
 const commentStore = useCommentStore()
 
 const liked = ref(false)
+
+const bookmarked = ref(false)
 
 onMounted(async () => {
   await boardStore.increaseView(route.params.id)
@@ -182,6 +213,19 @@ async function likePost() {
   }
 }
 
+async function bookmarkPost() {
+  bookmarked.value = !bookmarked.value
+
+  const success = await boardStore.toggleBookmark(
+    route.params.id,
+    bookmarked.value,
+  )
+
+  if (success) {
+    post.value = await boardStore.findPost(route.params.id)
+  }
+}
+
 function formatDate(date) {
   if (!date) {
     return ''
@@ -202,77 +246,95 @@ async function addComment(content) {
 <style scoped>
 .container {
   max-width: 900px;
-
   margin: 40px auto;
+  padding: 0 32px;
+  box-sizing: border-box;
 }
 
 .card {
   background: white;
-
   border-radius: 20px;
-
   padding: 32px;
-
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
-.category {
-  display: inline-block;
+/* ---------- 작성자 ---------- */
 
-  background: #eef4ff;
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
 
-  color: #3182f6;
+.avatar {
+  width: 42px;
+  height: 42px;
 
-  padding: 6px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  border-radius: 14px;
+  border-radius: 50%;
+
+  background: #f2f4f6;
+
+  font-size: 20px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.author {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.date {
+  margin-top: 3px;
 
   font-size: 13px;
 
-  font-weight: 600;
+  color: #8b95a1;
+}
+
+/* ---------- 제목 ---------- */
+
+.title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.4;
 
   margin-bottom: 16px;
 }
 
-.title {
-  font-size: 26px;
+/* ---------- 태그 ---------- */
 
-  font-weight: 800;
-
-  line-height: 1.4;
-
-  margin-bottom: 20px;
-}
-
-.meta {
+.tags {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 
-  gap: 15px;
-
-  color: #8b95a1;
-
-  font-size: 14px;
+  margin-bottom: 24px;
 }
 
-.stats {
-  margin-top: 16px;
+.tag {
+  padding: 6px 12px;
 
-  display: flex;
+  border-radius: 999px;
 
-  gap: 18px;
+  background: #eef6ff;
 
-  font-size: 14px;
+  color: #3182f6;
 
-  color: #555;
+  font-size: 13px;
+
+  font-weight: 600;
 }
 
-.divider {
-  height: 1px;
-
-  background: #e5e7eb;
-
-  margin: 24px 0;
-}
+/* ---------- 본문 ---------- */
 
 .content {
   min-height: 250px;
@@ -284,25 +346,155 @@ async function addComment(content) {
   white-space: pre-wrap;
 }
 
-.like {
-  margin-top: 25px;
+/* ---------- 이미지 ---------- */
 
-  padding: 12px 20px;
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 
-  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.image {
+  width: 180px;
+
+  border-radius: 12px;
+}
+
+/* ---------- 구분선 ---------- */
+
+.divider {
+  height: 1px;
+
+  margin: 24px 0;
+
+  background: #e5e7eb;
+}
+
+/* ---------- 버튼 ---------- */
+
+.button-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* ---------- 액션바 ---------- */
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 28px 0;
+}
+
+.left-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.right-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  color: #666;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+/* ---------- 좋아요 / 북마크 ---------- */
+
+.like,
+.bookmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  height: 42px;
+
+  padding: 0 18px;
 
   border: 1px solid #ddd;
+  border-radius: 999px;
 
   background: white;
 
   cursor: pointer;
+
+  font-size: 14px;
+
+  line-height: 1;
+
+  transition: all .2s ease;
 }
 
-.button-group {
+.like:hover,
+.bookmark:hover {
+  background: #f8f8f8;
+}
+
+.like.active {
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+.bookmark.active {
+  background: #eef6ff;
+  border-color: #3182f6;
+  color: #3182f6;
+}
+
+.action-item {
   display: flex;
+  align-items: center;
 
-  gap: 12px;
+  cursor: pointer;
+
+  color: #555;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: .2s;
 }
+
+.action-item:hover {
+  color: #3182f6;
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 18px;
+
+  background: #d1d5db;
+}
+
+/* ---------- 댓글 수 ---------- */
+
+.comment-count {
+  display: flex;
+  align-items: center;
+
+  height: 42px;
+
+  font-size: 14px;
+
+  color: #666;
+
+  font-weight: 600;
+
+  line-height: 1;
+}
+
+/* ---------- 반응형 ---------- */
 
 @media (max-width: 768px) {
   .container {
@@ -314,97 +506,23 @@ async function addComment(content) {
   }
 
   .title {
-    font-size: 24px;
+    font-size: 22px;
   }
-}
 
-.profile {
-  display: flex;
+  .action-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 
-  align-items: center;
+  .left-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 
-  gap: 12px;
-
-  margin-bottom: 20px;
-}
-
-.avatar {
-  width: 42px;
-
-  height: 42px;
-
-  border-radius: 50%;
-
-  background: #f2f4f6;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 20px;
-}
-
-.profile-info {
-  display: flex;
-
-  flex-direction: column;
-}
-
-.author {
-  font-weight: 600;
-
-  font-size: 15px;
-}
-
-.date {
-  font-size: 13px;
-
-  color: #8b95a1;
-
-  margin-top: 3px;
-}
-
-.action-bar {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin: 25px 0;
-}
-
-.like {
-  padding: 10px 18px;
-
-  border-radius: 20px;
-
-  border: 1px solid #ddd;
-
-  background: white;
-
-  cursor: pointer;
-
-  font-size: 14px;
-}
-
-.like:hover {
-  background: #f8f8f8;
-}
-
-.comment-count {
-  color: #555;
-
-  font-size: 14px;
-
-  font-weight: 600;
-}
-
-.like.active {
-  background: #fee2e2;
-
-  border-color: #fecaca;
+  .right-info {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 </style>

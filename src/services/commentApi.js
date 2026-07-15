@@ -8,7 +8,7 @@ const comments = [
 
     content: '좋은 정보 감사합니다.',
 
-    createdAt: '2026-07-14T10:30:00',
+    created_at: '2026-07-14T10:30:00',
   },
 
   {
@@ -20,7 +20,7 @@ const comments = [
 
     content: '저도 가봐야겠네요.',
 
-    createdAt: '2026-07-14T11:20:00',
+    created_at: '2026-07-14T11:20:00',
   },
 ]
 
@@ -36,7 +36,7 @@ export async function createComment(data) {
 
     author: '익명',
 
-    createdAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
 
     ...data,
   }

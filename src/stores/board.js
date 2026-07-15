@@ -7,6 +7,7 @@ import {
   deletePost,
   checkPassword,
   toggleLike,
+  toggleBookmark,
   increaseView,
 } from '@/services/boardApi'
 
@@ -99,6 +100,23 @@ export const useBoardStore = defineStore(
         const response = await toggleLike(id, liked)
 
         if (!response) {
+          return false
+        }
+
+        const index = this.posts.findIndex((post) => post.id === Number(id))
+
+        if (index !== -1) {
+          this.posts[index] = response.data
+        }
+
+        return true
+      },
+
+      // 북마크 토글
+      async toggleBookmark(id, bookmarked) {
+        const response = await toggleBookmark(id, bookmarked)
+
+        if (!response.success) {
           return false
         }
 

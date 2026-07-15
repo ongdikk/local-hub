@@ -10,7 +10,7 @@
           </div>
 
           <div class="time">
-            {{ formatDate(post.createdAt) }}
+            {{ formatDate(post.created_at ?? post.created_at) }}
           </div>
         </div>
       </div>
@@ -20,16 +20,29 @@
       {{ post.title }}
     </h3>
 
+    <div
+        v-if="post.tags?.length"
+        class="tags"
+      >
+        <span
+          v-for="tag in post.tags"
+          :key="tag"
+          class="tag"
+        >
+          #{{ tag }}
+        </span>
+      </div>
+
     <p class="content">
       {{ post.content }}
     </p>
 
     <div class="footer">
-      <span> 👁 {{ post.views }} </span>
+      <span>❤️ {{ post.likes ?? 0 }}</span>
 
-      <span> ❤️ {{ post.likes ?? 0 }} </span>
+      <span>💬 {{ post.commentCount ?? 0 }}</span>
 
-      <span> 💬 {{ post.commentCount ?? 0 }} </span>
+      <span>🔖 {{ post.bookmarks ?? 0 }}</span>
     </div>
   </article>
 </template>
@@ -40,7 +53,6 @@ import { useRouter } from 'vue-router'
 const props = defineProps({
   post: {
     type: Object,
-
     required: true,
   },
 })
@@ -52,11 +64,12 @@ function goDetail() {
 }
 
 function formatDate(date) {
-  const now = new Date()
+  if (!date) return ''
 
+  const now = new Date()
   const created = new Date(date)
 
-  const diff = Math.floor((now - created) / (1000 * 60))
+  const diff = Math.floor((now - created) / 60000)
 
   if (diff < 60) {
     return `${diff}분 전`
@@ -73,107 +86,84 @@ function formatDate(date) {
 <style scoped>
 .card {
   background: white;
-
   border-radius: 18px;
-
   padding: 24px;
-
   margin-bottom: 14px;
-
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: .2s;
 }
 
 .card:hover {
   transform: translateY(-2px);
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
 
-.header {
-  margin-bottom: 18px;
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:16px;
 }
 
-.profile {
+.profile{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#f2f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.writer{
+  font-weight:600;
+}
+
+.time{
+  font-size:12px;
+  color:#8b95a1;
+}
+
+.tags {
   display: flex;
-
-  align-items: center;
-
+  flex-wrap: wrap;
   gap: 10px;
+
+  margin-bottom: 22px;
 }
 
-.avatar {
-  width: 36px;
-
-  height: 36px;
-
-  border-radius: 50%;
-
-  background: #f2f4f6;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
+.tag{
+  padding:4px 10px;
+  border-radius:999px;
+  background:#eef5ff;
+  color:#3182f6;
+  font-size:12px;
+  font-weight:600;
 }
 
-.writer {
-  font-size: 14px;
-
-  font-weight: 600;
+.title{
+  font-size:19px;
+  font-weight:700;
+  margin-bottom:12px;
 }
 
-.time {
-  font-size: 12px;
-
-  color: #8b95a1;
+.content{
+  color:#555;
+  line-height:1.6;
+  margin-bottom:18px;
 }
 
-.title {
-  font-size: 19px;
-
-  font-weight: 700;
-
-  margin-bottom: 12px;
-}
-
-.content {
-  color: #4b5563;
-
-  line-height: 1.6;
-
-  margin-bottom: 20px;
-
-  display: -webkit-box;
-
-  -webkit-box-orient: vertical;
-
-  overflow: hidden;
-}
-
-.footer {
-  border-top: 1px solid #f0f1f3;
-
-  padding-top: 14px;
-
-  display: flex;
-
-  gap: 18px;
-
-  color: #8b95a1;
-
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .card {
-    padding: 20px;
-  }
-
-  .title {
-    font-size: 17px;
-  }
+.footer{
+  border-top:1px solid #e5e7eb;
+  padding-top:14px;
+  display:flex;
+  gap:18px;
+  color:#8b95a1;
 }
 </style>
