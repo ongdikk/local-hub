@@ -1,83 +1,53 @@
 <template>
-
-<div class="signup-card">
-
+  <div class="signup-card">
     <h1>회원가입</h1>
 
-    <BaseInput
-        placeholder="아이디"
-    />
+    <BaseInput placeholder="아이디" />
 
-    <BaseInput
-        placeholder="닉네임"
-    />
+    <BaseInput placeholder="닉네임" />
 
-    <BaseInput
-        type="password"
-        placeholder="비밀번호"
-    />
+    <BaseInput type="password" placeholder="비밀번호" />
 
-    <BaseInput
-        type="password"
-        placeholder="비밀번호 확인"
-    />
+    <BaseInput type="password" placeholder="비밀번호 확인" />
 
-    <BaseButton>
+    <BaseButton> 회원가입 </BaseButton>
 
-        회원가입
-
-    </BaseButton>
-
-    <RouterLink
-        to="/login"
-        class="login"
-    >
-
-        로그인으로 돌아가기
-
-    </RouterLink>
-
-</div>
-
+    <RouterLink to="/login" class="login"> 로그인으로 돌아가기 </RouterLink>
+  </div>
 </template>
 
 <script setup>
-
 import BaseButton from '../common/BaseButton.vue'
 import BaseInput from '../common/BaseInput.vue'
-
 </script>
 
 <style scoped>
-
-.signup-card{
-
-    width:420px;
-
-    background:white;
-
-    padding:40px;
-
-    border-radius:20px;
-
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
+.signup-card {
+  width: 420px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.login{
+.login {
+  text-align: center;
 
-    text-align:center;
+  text-decoration: none;
 
-    text-decoration:none;
-
-    color:#3182f6;
-
+  color: #3182f6;
 }
 
+@media (max-width: 480px) {
+  .login-card,
+  .signup-card {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  }
+}
 </style>

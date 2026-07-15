@@ -42,4 +42,11 @@ defineEmits(['update:modelValue'])
 .input:focus {
   border-color: #3182f6;
 }
+
+@media (max-width: 480px) {
+  .input {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
 </style>

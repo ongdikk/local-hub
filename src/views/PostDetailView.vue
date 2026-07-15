@@ -17,7 +17,8 @@
             @keydown.space="goBoard"
             aria-label="목록"
           >
-            뒤로가기
+            <span class="bt-icon">◀</span>
+            <span class="bt-text">뒤로가기</span>
           </span>
         </div>
       </div>
@@ -255,16 +256,16 @@ async function addComment(content) {
 <style scoped>
 .container {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 0 32px;
+  margin: 24px auto;
+  padding: 0 28px;
   box-sizing: border-box;
 }
 
 .card {
   background: white;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 /* ---------- 작성자 ---------- */
@@ -403,6 +404,7 @@ async function addComment(content) {
 .card-top-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .back-btn {
@@ -495,6 +497,43 @@ async function addComment(content) {
 
 .back-text:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* collapse text on very small screens to avoid overflow */
+@media (max-width: 480px) {
+  .back-text {
+    padding: 8px;
+  }
+
+  .back-text .bt-text {
+    display: none;
+  }
+
+  .card-top-row {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+
+  .card-top-row {
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-text {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
 }
 
 /* ---------- 액션바 ---------- */

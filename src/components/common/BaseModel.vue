@@ -41,11 +41,8 @@ defineEmits(['confirm', 'close'])
 
 .modal {
   width: 420px;
-
   background: white;
-
   border-radius: 18px;
-
   padding: 28px;
 }
 
@@ -55,5 +52,22 @@ defineEmits(['confirm', 'close'])
   gap: 12px;
 
   margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    width: calc(100% - 40px);
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .buttons .button,
+  .buttons basebutton {
+    width: 100%;
+  }
 }
 </style>
