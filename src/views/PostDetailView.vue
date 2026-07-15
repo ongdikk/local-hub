@@ -2,22 +2,24 @@
   <Header />
 
   <div class="container" v-if="post">
-    <div class="top-actions-row">
-      <div class="top-left">
-        <BaseButton @click="goBoard">목록</BaseButton>
-      </div>
-
-      <div class="top-right">
-        <BaseButton @click="editPost">수정</BaseButton>
-        <BaseButton @click="deletePost">삭제</BaseButton>
-      </div>
-    </div>
-
     <article class="card">
-      <!-- 카테고리 -->
-
-      <div v-if="post.tags?.length" class="tags">
-        <span v-for="tag in post.tags" :key="tag" class="tag"> #{{ tag }} </span>
+      <!-- 상단 액션 (뒤로가기 / 수정 / 삭제) - 태그 위치로 이동 -->
+      <div class="card-top-row">
+        <div class="card-top-actions">
+          <button class="icon-btn edit" @click="editPost" aria-label="수정">✏️</button>
+          <button class="icon-btn delete" @click="deletePost" aria-label="삭제">🗑️</button>
+          <span
+            class="back-text"
+            role="button"
+            tabindex="0"
+            @click="goBoard"
+            @keydown.enter="goBoard"
+            @keydown.space="goBoard"
+            aria-label="목록"
+          >
+            뒤로가기
+          </span>
+        </div>
       </div>
 
       <!-- 작성자 영역 -->
@@ -38,6 +40,9 @@
       <h1 class="title">
         {{ post.title }}
       </h1>
+      <div v-if="post.tags?.length" class="tags">
+        <span v-for="tag in post.tags" :key="tag" class="tag"> #{{ tag }} </span>
+      </div>
 
       <!-- 내용 -->
       <div class="content">
@@ -383,19 +388,113 @@ async function addComment(content) {
   gap: 12px;
 }
 
-.top-actions-row {
-  max-width: 900px;
-  margin: 16px auto 0;
-  padding: 0 32px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.top-actions-wrapper {
+  display: none;
 }
 
-.top-right {
+.card-top-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-top-actions {
   display: flex;
   gap: 8px;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* removed previous small back-btn offset per design update */
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: none;
+  background: #f3f6fb;
+  color: #334155;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+  box-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+}
+
+.icon-btn:hover {
+  transform: translateY(-3px);
+  background: #e9f0ff;
+}
+
+.icon-btn.edit {
+  background: linear-gradient(180deg, #eef6ff, #e6f0ff);
+  color: #1e40af;
+}
+
+.icon-btn.delete {
+  background: linear-gradient(180deg, #fff1f2, #ffeef0);
+  color: #b91c1c;
+}
+
+/* Separate style for back icon: white background, larger text */
+.icon-btn.back {
+  background: white;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 700;
+  width: 55px;
+  height: 48px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn.back:hover {
+  transform: translateY(-3px);
+  background: #ffffff;
+}
+
+/* text-based back link with button-like hover/focus */
+.back-text {
+  display: inline-block;
+  background: white;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+}
+
+.back-text:hover,
+.back-text:focus {
+  transform: translateY(-3px);
+  background: #f8fafc;
+  outline: none;
+}
+
+.back-text:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
 /* ---------- 액션바 ---------- */
