@@ -1,6 +1,10 @@
 import { success, fail } from './response'
 import api from './api'
 
+// 현재는 Mock Data
+// FastAPI 연결 시 이 파일 내부만 axios 요청으로 변경
+
+// 게시글 목록 조회
 export async function getPosts(params = {}) {
   const { page = 1, limit = 10, keyword = '', tag = '' } = params
 
@@ -78,18 +82,13 @@ export async function createPost(data) {
 //   )
 // }
 export async function getPostById(id) {
-  const post = posts.find((post) => post.id === Number(id))
+  try {
+    const response = await api.get(`/api/posts/${id}`)
 
-  if (!post) {
-    return fail('게시글을 찾을 수 없습니다.')
+    return success(response.data, '게시글 조회 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '게시글 조회 실패')
   }
-
-  return success(
-    {
-      ...post,
-    },
-    '게시글 조회 성공',
-  )
 }
 
 // 게시글 수정
@@ -156,46 +155,40 @@ export async function checkPassword(id, password) {
   )
 }
 
+// 좋아요 토글
+// POST /api/posts/{post_id}/like
 export async function toggleLike(id, liked) {
-  const post = posts.find((post) => post.id === Number(id))
+  try {
+    const response = await api.post(`/api/posts/${id}/like`, liked ? 'like' : 'unlike')
 
-  if (!post) {
-    return false
+    return success(response.data, '좋아요 변경 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '좋아요 변경 실패')
   }
-
-  if (liked) {
-    post.likes += 1
-  } else {
-    post.likes -= 1
-  }
-
-  return success(post, '좋아요 변경 성공')
 }
 
-export async function toggleBookmark(id, bookmarked) {
-  const post = posts.find((post) => post.id === Number(id))
+// 북마크 토글
+// POST /api/posts/{post_id}/bookmark
+export async function toggleBookmark(id) {
+  try {
+    const response = await api.post(`/api/posts/${id}/bookmark`, 'string', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-  if (!post) {
-    return false
+    return success(response.data, '북마크 변경 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '북마크 변경 실패')
   }
-
-  if (bookmarked) {
-    post.bookmarks += 1
-  } else {
-    post.bookmarks -= 1
-  }
-
-  return success(post, '북마크 변경 성공')
 }
 
-export async function increaseView(id) {
-  const post = posts.find((post) => post.id === Number(id))
+// export async function increaseView(id) {
+//   try {
+//     const response = await api.post(`/api/posts/${id}/view`)
 
-  if (!post) {
-    return false
-  }
-
-  post.views += 1
-
-  return success(post, '조회수 증가 성공')
-}
+//     return success(response.data, '조회수 증가 성공')
+//   } catch (error) {
+//     return fail(error.response?.data?.message ?? '조회수 증가 실패')
+//   }
+// }

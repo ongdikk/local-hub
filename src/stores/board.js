@@ -9,7 +9,7 @@ import {
   checkPassword,
   toggleLike,
   toggleBookmark,
-  increaseView,
+  // increaseView,
 } from '@/services/boardApi'
 
 export const useBoardStore = defineStore(
@@ -47,7 +47,7 @@ export const useBoardStore = defineStore(
       // async findPost(id) {
       //   return this.posts.find((post) => post.id === Number(id))
       // },
-      async fetchPost(id) {
+      async findPost(id) {
         const response = await getPostById(id)
 
         if (!response.success) {
@@ -110,52 +110,40 @@ export const useBoardStore = defineStore(
       async toggleLike(id, liked) {
         const response = await toggleLike(id, liked)
 
-        if (!response) {
+        if (!response.success) {
           return false
-        }
-
-        const index = this.posts.findIndex((post) => post.id === Number(id))
-
-        if (index !== -1) {
-          this.posts[index] = response.data
         }
 
         return true
       },
 
       // 북마크 토글
-      async toggleBookmark(id, bookmarked) {
-        const response = await toggleBookmark(id, bookmarked)
+      async toggleBookmark(id) {
+        const response = await toggleBookmark(id)
 
         if (!response.success) {
           return false
         }
 
-        const index = this.posts.findIndex((post) => post.id === Number(id))
-
-        if (index !== -1) {
-          this.posts[index] = response.data
-        }
-
-        return true
+        return response.data
       },
 
       // 조회수 증가
-      async increaseView(id) {
-        const response = await increaseView(id)
+      // async increaseView(id) {
+      //   const response = await increaseView(id)
 
-        if (!response) {
-          return false
-        }
+      //   if (!response) {
+      //     return false
+      //   }
 
-        const index = this.posts.findIndex((post) => post.id === Number(id))
+      //   const index = this.posts.findIndex((post) => post.id === Number(id))
 
-        if (index !== -1) {
-          this.posts[index] = response.data
-        }
+      //   if (index !== -1) {
+      //     this.posts[index] = response.data
+      //   }
 
-        return true
-      },
+      //   return true
+      // },
     },
   },
 )
