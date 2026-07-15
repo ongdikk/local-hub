@@ -6,9 +6,16 @@
 
         <p>구미·경북 지역 커뮤니티</p>
       </div>
+
+      <WeatherBadge />
     </div>
+
   </header>
 </template>
+
+<script setup>
+import WeatherBadge from '@/components/common/WeatherBadge.vue'
+</script>
 
 <style scoped>
 .header {
@@ -31,6 +38,12 @@
   margin: 0 auto;
 
   padding: 18px 20px;
+  
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
 }
 
 .brand h1 {
