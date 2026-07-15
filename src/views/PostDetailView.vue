@@ -58,22 +58,12 @@
           {{ post.likes }}
         </div>
 
-        <!-- <button class="like" :class="{ active: liked }" @click="likePost">
-          {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
-          {{ post.likes }}
-        </button> -->
-
         <div class="divider-vertical"></div>
 
         <div class="action-item" @click="bookmarkPost" :class="{ active: bookmarked }">
           {{ bookmarked ? '🔖 저장 취소' : '📑 저장' }}
           {{ post.bookmarks }}
         </div>
-
-        <!-- <button class="bookmark" :class="{ active: bookmarked }" @click="bookmarkPost">
-          {{ bookmarked ? '🔖 저장 취소' : '📑 저장' }}
-          {{ post.bookmarks }}
-        </button> -->
       </div>
 
       <div class="comment-count">💬 댓글 {{ commentStore.comments.length }}</div>
@@ -132,8 +122,6 @@ const liked = ref(false)
 const bookmarked = ref(false)
 
 onMounted(async () => {
-  // await boardStore.increaseView(route.params.id)
-
   post.value = await boardStore.findPost(route.params.id)
 
   if (!post.value) {
@@ -211,27 +199,26 @@ async function likePost() {
 }
 
 async function bookmarkPost() {
-  const previous = Number(post.value.bookmarks ?? 0)
+  const previousFlag = bookmarked.value
+  const previousCount = post.value.bookmarks || 0
 
+  // UI 즉시 변경 (optimistic)
   bookmarked.value = !bookmarked.value
-
-  // 즉시 변경
-  post.value.bookmarks = previous + (bookmarked.value ? 1 : -1)
+  post.value.bookmarks = previousCount + (bookmarked.value ? 1 : -1)
 
   const result = await boardStore.toggleBookmark(route.params.id)
 
+  // 실패하면 원상복구
   if (!result) {
-    // 실패 복구
-    post.value.bookmarks = previous
+    bookmarked.value = previousFlag
+    post.value.bookmarks = previousCount
+  } else {
+    // 서버 기준 상태 반영 (서버가 전체 카운트를 제공하면 사용)
+    if (typeof result.bookmarks === 'number') {
+      post.value.bookmarks = result.bookmarks
+    }
 
-    bookmarked.value = !bookmarked.value
-
-    return
-  }
-
-  // 서버 응답 반영
-  if (result.bookmarks !== undefined) {
-    post.value.bookmarks = result.bookmarks
+    bookmarked.value = !!result.bookmarked
   }
 }
 

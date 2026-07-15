@@ -36,11 +36,14 @@ export const useBoardStore = defineStore(
       async addPost(post) {
         const response = await createPost(post)
 
-        // API 연결 시 삭제
-        return response.data
+        if (!response.success) {
+          return null
+        }
 
-        // 삭제 후
-        // this.posts.unshift(response.data) 추가
+        // API가 { post_id: number } 형태로 반환한다고 가정
+        const postId = response.data?.post_id ?? response.data?.postId ?? response.data?.id
+
+        return postId
       },
 
       // 게시글 상세 조회
@@ -125,25 +128,30 @@ export const useBoardStore = defineStore(
           return false
         }
 
-        return response.data
+        // 서버 응답에 bookmarked(boolean) 와 optional bookmarks(count) 이 온다고 가정
+        const data = response.data
+
+        // posts 배열에 변경 사항 반영해서 목록에서 유지되게 함
+        const index = this.posts.findIndex((post) => post.id === Number(id))
+
+        if (index !== -1) {
+          // bookmarked 플래그가 없을 수 있으니 설정
+          const current = this.posts[index]
+
+          // 만약 서버가 전체 카운트를 반환하면 사용, 아니면 플래그 기준으로 증감
+          if (typeof data.bookmarks === 'number') {
+            current.bookmarks = data.bookmarks
+          } else if (typeof data.bookmarked === 'boolean') {
+            current.bookmarks = (current.bookmarks || 0) + (data.bookmarked ? 1 : -1)
+            if (current.bookmarks < 0) current.bookmarks = 0
+          }
+
+          current.bookmarked = !!data.bookmarked
+          this.posts.splice(index, 1, { ...current })
+        }
+
+        return data
       },
-
-      // 조회수 증가
-      // async increaseView(id) {
-      //   const response = await increaseView(id)
-
-      //   if (!response) {
-      //     return false
-      //   }
-
-      //   const index = this.posts.findIndex((post) => post.id === Number(id))
-
-      //   if (index !== -1) {
-      //     this.posts[index] = response.data
-      //   }
-
-      //   return true
-      // },
     },
   },
 )
