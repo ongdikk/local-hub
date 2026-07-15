@@ -2,7 +2,9 @@
   <header class="header">
     <div class="inner">
       <div class="brand">
-        <h1>LocalHub</h1>
+        <RouterLink to="/" class="brand-link">
+          <h1>LocalHub</h1>
+        </RouterLink>
 
         <p>구미·경북 지역 커뮤니티</p>
       </div>
@@ -44,6 +46,10 @@ import WeatherBadge from '@/components/common/WeatherBadge.vue'
   justify-content: space-between;
 
   align-items: center;
+}
+
+.brand-link {
+  text-decoration: none;
 }
 
 .brand h1 {
