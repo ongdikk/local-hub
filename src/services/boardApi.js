@@ -1,4 +1,5 @@
 import { success, fail } from './response'
+import api from './api'
 
 // 현재는 Mock Data
 // FastAPI 연결 시 이 파일 내부만 axios 요청으로 변경
@@ -106,23 +107,40 @@ export async function getPosts(params = {}) {
 
 // 게시글 작성
 // POST /api/posts
+// export async function createPost(data) {
+//   const newPost = {
+//     id: Date.now(),
+//     views: 0,
+//     likes: 0,
+//     bookmarks: 0,
+//     tags: [],
+//     image_urls: [],
+//     created_at: new Date().toISOString(),
+
+//     ...data,
+//   }
+
+//   // API 연결 시에는 삭제
+//   posts.unshift(newPost)
+
+//   return success(newPost, '게시글 작성 성공')
+// }
 export async function createPost(data) {
-  const newPost = {
-    id: Date.now(),
-    views: 0,
-    likes: 0,
-    bookmarks: 0,
-    tags: [],
-    image_urls: [],
-    created_at: new Date().toISOString(),
+  console.log('createPost 호출됨', data)
 
-    ...data,
+  try {
+    const response = await api.post('/api/posts', data)
+
+    console.log('API 응답', response)
+
+    console.log('현재 posts:', posts)
+
+    return success(response.data, '게시글 작성 성공')
+  } catch (error) {
+    console.log('API 오류', error)
+
+    return fail(error.response?.data?.message ?? '게시글 작성 실패')
   }
-
-  // API 연결 시에는 삭제
-  posts.unshift(newPost)
-
-  return success(newPost, '게시글 작성 성공')
 }
 
 // 게시글 상세 조회

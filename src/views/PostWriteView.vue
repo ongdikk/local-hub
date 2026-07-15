@@ -27,6 +27,7 @@ const router = useRouter()
 const boardStore = useBoardStore()
 
 async function submitPost(data) {
+  console.log('PostWriteView submitPost 실행', data)
   await boardStore.addPost(data)
 
   router.push('/board')

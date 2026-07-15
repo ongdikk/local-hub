@@ -106,6 +106,8 @@ watch(
 )
 
 function submit() {
+  console.log('PostForm submit', form)
+
   emit(
     'submit',
 
