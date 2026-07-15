@@ -80,4 +80,19 @@ button {
 button:hover {
   background: #2563eb;
 }
+
+@media (max-width: 768px) {
+  textarea {
+    min-height: 80px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 16px;
+  }
+}
 </style>

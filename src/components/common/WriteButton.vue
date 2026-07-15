@@ -19,15 +19,10 @@ function goWrite() {
 <style scoped>
 .write-button {
   position: fixed;
-
   left: 50%;
-
   bottom: 30px;
-
   transform: translateX(-50%);
-
   height: 52px;
-
   padding: 0 28px;
 
   display: flex;
@@ -68,12 +63,21 @@ function goWrite() {
 @media (max-width: 768px) {
   .write-button {
     bottom: 20px;
-
     height: 48px;
-
     padding: 0 22px;
-
     font-size: 14px;
+    height: 48px;
+    padding: 0 22px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .write-button {
+    left: auto;
+    right: 16px;
+    transform: none;
+    bottom: 20px;
   }
 }
 </style>

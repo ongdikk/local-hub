@@ -26,24 +26,6 @@ export async function getPosts(params = {}) {
 
 // 게시글 작성
 // POST /api/posts
-// export async function createPost(data) {
-//   const newPost = {
-//     id: Date.now(),
-//     views: 0,
-//     likes: 0,
-//     bookmarks: 0,
-//     tags: [],
-//     image_urls: [],
-//     created_at: new Date().toISOString(),
-
-//     ...data,
-//   }
-
-//   // API 연결 시에는 삭제
-//   posts.unshift(newPost)
-
-//   return success(newPost, '게시글 작성 성공')
-// }
 export async function createPost(data) {
   try {
     const response = await api.post('/api/posts', data)
@@ -58,19 +40,6 @@ export async function createPost(data) {
 
 // 게시글 상세 조회
 // GET /api/posts/{id}
-// export async function getPostById(id) {
-//   const post = posts.find((post) => post.id === Number(id))
-
-//   if (!post) {
-//     return fail('게시글을 찾을 수 없습니다.')
-//   }
-
-//   return success(
-//     post,
-
-//     '게시글 조회 성공',
-//   )
-// }
 export async function getPostById(id) {
   try {
     const response = await api.get(`/api/posts/${id}`)

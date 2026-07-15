@@ -2,7 +2,7 @@
   <header class="header">
     <div class="inner">
       <div class="brand">
-        <RouterLink to="/" class="brand-link">
+        <RouterLink to="/board" class="brand-link">
           <h1>LocalHub</h1>
         </RouterLink>
 
@@ -11,7 +11,6 @@
 
       <WeatherBadge />
     </div>
-
   </header>
 </template>
 
@@ -40,7 +39,7 @@ import WeatherBadge from '@/components/common/WeatherBadge.vue'
   margin: 0 auto;
 
   padding: 18px 20px;
-  
+
   display: flex;
 
   justify-content: space-between;

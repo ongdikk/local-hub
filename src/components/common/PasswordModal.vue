@@ -111,4 +111,20 @@ button {
 
   cursor: pointer;
 }
+
+@media (max-width: 480px) {
+  .modal {
+    width: calc(100% - 40px);
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
 </style>

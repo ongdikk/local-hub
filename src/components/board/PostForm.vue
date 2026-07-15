@@ -198,4 +198,25 @@ function toggleTag(tag) {
 
   gap: 10px;
 }
+
+@media (max-width: 768px) {
+  .tag-chip {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .content {
+    min-height: 180px;
+    padding: 12px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .buttons .button,
+  .buttons basebutton {
+    width: 100%;
+  }
+}
 </style>

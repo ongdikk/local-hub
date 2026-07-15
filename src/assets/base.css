@@ -33,7 +33,7 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
-  --section-gap: 160px;
+  --section-gap: 120px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,4 +83,65 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings spacing and responsive scale */
+h1, h2, h3 {
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.05rem; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.1rem; }
+}
+
+/* Global card spacing baseline - components may override but this reduces large gaps */
+.card {
+  margin-bottom: 16px;
+}
+
+/* make the whole page more responsive: scale base font and ensure media are fluid */
+html {
+  font-size: 15px;
+}
+
+@media (max-width: 1024px) {
+  html { font-size: 14px; }
+}
+
+@media (max-width: 768px) {
+  html { font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 12px; }
+}
+
+/* Make images and embedded media scale to container */
+img, picture, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Reduce large section gaps on small screens */
+:root {
+  --section-gap: 160px;
+}
+
+@media (max-width: 768px) {
+  :root { --section-gap: 48px; }
+}
+
+/* Utility: center content with responsive padding */
+.page-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }

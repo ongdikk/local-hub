@@ -66,7 +66,7 @@ function formatDate(date) {
 .card {
   background: white;
   border-radius: 18px;
-  padding: 24px;
+  padding: 20px;
   margin-bottom: 14px;
   cursor: pointer;
   transition: 0.2s;
@@ -144,5 +144,31 @@ function formatDate(date) {
   display: flex;
   gap: 18px;
   color: #8b95a1;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .title {
+    font-size: 17px;
+  }
+
+  .content {
+    font-size: 14px;
+  }
+
+  .footer {
+    gap: 12px;
+    padding-top: 12px;
+    flex-wrap: wrap;
+  }
 }
 </style>
