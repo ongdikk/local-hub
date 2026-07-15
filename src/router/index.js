@@ -34,6 +34,12 @@ const router = createRouter({
       component: PostEditView,
     },
   ],
+
+  scrollBehavior() {
+    return {
+      top: 0,
+    }
+  },
 })
 
 export default router
