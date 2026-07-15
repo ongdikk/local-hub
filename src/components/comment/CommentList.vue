@@ -10,7 +10,7 @@
           </div>
 
           <div class="date">
-            {{ formatDate(comment.createdAt) }}
+            {{ formatDate(comment.created_at) }}
           </div>
         </div>
       </div>

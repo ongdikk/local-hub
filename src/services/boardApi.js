@@ -61,9 +61,44 @@ const posts = [
 
 // 게시글 전체 조회
 // GET /api/posts
-export async function getPosts() {
+// export async function getPosts() {
+//   return success(
+//     [...posts],
+
+//     '게시글 목록 조회 성공',
+//   )
+// }
+export async function getPosts(params = {}) {
+  const { page = 1, limit = 10, keyword = '', tag = '' } = params
+
+  let result = [...posts]
+
+  // 검색어 필터
+  if (keyword) {
+    const search = keyword.toLowerCase()
+
+    result = result.filter(
+      (post) =>
+        post.title.toLowerCase().includes(search) ||
+        post.content.toLowerCase().includes(search) ||
+        post.tags?.some((tag) => tag.toLowerCase().includes(search)),
+    )
+  }
+
+  // 태그 필터
+  if (tag && tag !== '전체') {
+    result = result.filter((post) => post.tags?.includes(tag))
+  }
+
+  // 페이지 처리
+  const start = (page - 1) * limit
+
+  const end = start + limit
+
+  result = result.slice(start, end)
+
   return success(
-    [...posts],
+    result,
 
     '게시글 목록 조회 성공',
   )

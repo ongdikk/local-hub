@@ -2,15 +2,17 @@
   <Header />
 
   <AppContainer>
-    <CategoryTabs @change="changeCategory" />
+    <CategoryTabs @change="changeTag" />
 
     <input
       v-model="keyword"
+      @input="testInput"
       class="search"
       placeholder="🔍 지역 정보를 검색해보세요."
     />
 
-    <PostList :posts="filteredPosts" />
+    <!-- <PostList :posts="filteredPosts" /> -->
+     <PostList :posts="boardStore.posts" />
 
     <WriteButton />
 
@@ -19,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 import Header from '@/components/common/Header.vue'
 import AppContainer from '@/components/common/AppContainer.vue'
@@ -37,28 +39,47 @@ const keyword = ref('')
 const selectedTag = ref('전체')
 
 onMounted(() => {
-  boardStore.loadPosts()
+  loadPosts()
+  // boardStore.loadPosts()
 })
 
-const filteredPosts = computed(() => {
-  const search = keyword.value.trim().toLowerCase()
+// const filteredPosts = computed(() => {
+//   const search = keyword.value.trim().toLowerCase()
 
-  return boardStore.posts.filter((post) => {
-    const matchTag =
-      selectedTag.value === '전체' ||
-      post.tags?.includes(selectedTag.value)
+//   return boardStore.posts.filter((post) => {
+//     const matchTag =
+//       selectedTag.value === '전체' ||
+//       post.tags?.includes(selectedTag.value)
 
-    const matchSearch =
-      post.title.toLowerCase().includes(search) ||
-      post.content.toLowerCase().includes(search)
+//     const matchSearch =
+//       post.title.toLowerCase().includes(search) ||
+//       post.content.toLowerCase().includes(search)
 
-    return matchTag && matchSearch
+//     return matchTag && matchSearch
+//   })
+// })
+
+async function loadPosts() {
+  console.log('검색 요청:', keyword.value)
+
+  await boardStore.loadPosts({
+    keyword: keyword.value,
+    tag: selectedTag.value,
   })
-})
 
-function changeCategory(tag) {
-  selectedTag.value = tag
+  console.log('결과:', boardStore.posts)
 }
+
+function changeTag(tag) {
+  selectedTag.value = tag
+
+  loadPosts()
+}
+
+watch(keyword, (value, oldValue) => {
+  console.log('watch 실행:', oldValue, '→', value)
+  loadPosts()
+})
 </script>
 
 <style scoped>

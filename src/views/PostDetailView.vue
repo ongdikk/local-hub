@@ -135,16 +135,10 @@ const actionType = ref('')
 
 const commentStore = useCommentStore()
 
-const liked = ref(false)
-
 const bookmarked = ref(false)
 
 onMounted(async () => {
-  await boardStore.increaseView(route.params.id)
-  
   post.value = await boardStore.findPost(route.params.id)
-
-  // await commentStore.loadComments(route.params.id)
 
   if (!post.value) {
     router.push('/board')
@@ -204,8 +198,6 @@ async function likePost() {
 
   const success = await boardStore.toggleLike(
     route.params.id,
-
-    liked.value,
   )
 
   if (success) {
