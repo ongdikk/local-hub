@@ -4,7 +4,6 @@
   <div class="admin-dashboard">
     <div class="admin-header">
       <h2>데이터 적재 관리자 패널</h2>
-      <p>TourAPI 4.0 JSON 데이터를 서버에 동기화합니다.</p>
     </div>
     
     <div class="admin-card">
@@ -127,7 +126,6 @@ const processFiles = (files) => {
     alert('JSON 파일만 업로드 가능합니다. 유효하지 않은 파일은 제외되었습니다.');
   }
   
-  // 기존 배열에 추가하는 방식 (원치 않으시면 덮어쓰기로 변경 가능)
   selectedFiles.value = [...selectedFiles.value, ...validFiles];
 };
 
