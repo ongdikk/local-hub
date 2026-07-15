@@ -127,6 +127,8 @@ const actionType = ref('')
 
 const commentStore = useCommentStore()
 
+const liked = ref(false)
+
 const bookmarked = ref(false)
 
 onMounted(async () => {
@@ -138,6 +140,8 @@ onMounted(async () => {
     router.push('/board')
     return
   }
+
+  liked.value = post.value.likes > 0
 
   await commentStore.loadComments(route.params.id)
 })
@@ -189,12 +193,20 @@ function closeModal() {
 }
 
 async function likePost() {
+  const previous = post.value.likes
+
   liked.value = !liked.value
 
-  const success = await boardStore.toggleLike(route.params.id)
+  // 즉시 UI 변경
+  post.value.likes += liked.value ? 1 : -1
 
-  if (success) {
-    post.value = await boardStore.findPost(route.params.id)
+  const success = await boardStore.toggleLike(route.params.id, liked.value)
+
+  // 실패 시 복구
+  if (!success) {
+    post.value.likes = previous
+
+    liked.value = !liked.value
   }
 }
 

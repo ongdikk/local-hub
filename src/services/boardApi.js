@@ -155,20 +155,16 @@ export async function checkPassword(id, password) {
   )
 }
 
+// 좋아요 토글
+// POST /api/posts/{post_id}/like
 export async function toggleLike(id, liked) {
-  const post = posts.find((post) => post.id === Number(id))
+  try {
+    const response = await api.post(`/api/posts/${id}/like`, liked ? 'like' : 'unlike')
 
-  if (!post) {
-    return false
+    return success(response.data, '좋아요 변경 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '좋아요 변경 실패')
   }
-
-  if (liked) {
-    post.likes += 1
-  } else {
-    post.likes -= 1
-  }
-
-  return success(post, '좋아요 변경 성공')
 }
 
 export async function toggleBookmark(id, bookmarked) {

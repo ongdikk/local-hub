@@ -110,14 +110,8 @@ export const useBoardStore = defineStore(
       async toggleLike(id, liked) {
         const response = await toggleLike(id, liked)
 
-        if (!response) {
+        if (!response.success) {
           return false
-        }
-
-        const index = this.posts.findIndex((post) => post.id === Number(id))
-
-        if (index !== -1) {
-          this.posts[index] = response.data
         }
 
         return true
