@@ -6,56 +6,42 @@ import api from './api'
 
 // 게시글 목록 조회
 // GET /api/posts
-export async function getPosts(params = {}) {
-  const response = await api.get('/api/posts', {
-    params: {
-      page: params.page ?? 1,
-      limit: params.limit ?? 10,
-      keyword: params.keyword ?? '',
-      tag: params.tag ?? '',
-    },
-  })
-
-  console.log('게시글 목록:', response.data)
-
-  return response.data
-}
-
 // export async function getPosts(params = {}) {
-//   const { page = 1, limit = 10, keyword = '', tag = '' } = params
+//   const response = await api.get('/api/posts', {
+//     params: {
+//       page: params.page ?? 1,
+//       limit: params.limit ?? 10,
+//       keyword: params.keyword ?? '',
+//       tag: params.tag ?? '',
+//     },
+//   })
 
-//   let result = [...posts]
+//   console.log('게시글 목록:', response.data)
 
-//   // 검색어 필터
-//   if (keyword) {
-//     const search = keyword.toLowerCase()
-
-//     result = result.filter(
-//       (post) =>
-//         post.title.toLowerCase().includes(search) ||
-//         post.content.toLowerCase().includes(search) ||
-//         post.tags?.some((tag) => tag.toLowerCase().includes(search)),
-//     )
-//   }
-
-//   // 태그 필터
-//   if (tag && tag !== '전체') {
-//     result = result.filter((post) => post.tags?.includes(tag))
-//   }
-
-//   // 페이지 처리
-//   const start = (page - 1) * limit
-
-//   const end = start + limit
-
-//   result = result.slice(start, end)
-
-//   return success(
-//     result,
-
-//     '게시글 목록 조회 성공',
-//   )
+//   return response.data
 // }
+export async function getPosts(params = {}) {
+  const { page = 1, limit = 10, keyword = '', tag = '' } = params
+
+  try {
+    const response = await api.get('/api/posts', {
+      params: {
+        page,
+        limit,
+        keyword,
+        tag,
+      },
+    })
+
+    console.log('게시글 목록 API 응답:', response.data)
+
+    return success(response.data, '게시글 목록 조회 성공')
+  } catch (error) {
+    console.log('게시글 목록 조회 실패:', error)
+
+    return fail(error.response?.data?.message ?? '게시글 조회 실패')
+  }
+}
 
 // 게시글 작성
 // POST /api/posts

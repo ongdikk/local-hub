@@ -12,13 +12,13 @@
     />
 
     <!-- <PostList :posts="filteredPosts" /> -->
-     <PostList :posts="boardStore.posts" />
+    <PostList :posts="boardStore.posts" />
 
     <WriteButton />
 
-    <ChatButton :opened="showChat" @toggle="showChat = !showChat"/>
+    <ChatButton :opened="showChat" @toggle="showChat = !showChat" />
 
-    <ChatWindow v-if="showChat" @close="showChat=false"/>
+    <ChatWindow v-if="showChat" @close="showChat = false" />
   </AppContainer>
 </template>
 
@@ -47,31 +47,11 @@ onMounted(() => {
   // boardStore.loadPosts()
 })
 
-// const filteredPosts = computed(() => {
-//   const search = keyword.value.trim().toLowerCase()
-
-//   return boardStore.posts.filter((post) => {
-//     const matchTag =
-//       selectedTag.value === '전체' ||
-//       post.tags?.includes(selectedTag.value)
-
-//     const matchSearch =
-//       post.title.toLowerCase().includes(search) ||
-//       post.content.toLowerCase().includes(search)
-
-//     return matchTag && matchSearch
-//   })
-// })
-
 async function loadPosts() {
-  console.log('검색 요청:', keyword.value)
-
   await boardStore.loadPosts({
     keyword: keyword.value,
-    tag: selectedTag.value,
+    tag: selectedTag.value === '전체' ? '' : selectedTag.value,
   })
-
-  console.log('결과:', boardStore.posts)
 }
 
 function changeTag(tag) {
@@ -101,7 +81,7 @@ watch(keyword, (value, oldValue) => {
 .search:focus {
   outline: none;
   border-color: #3182f6;
-  box-shadow: 0 0 0 3px rgba(49,130,246,.12);
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.12);
 }
 
 .search::placeholder {

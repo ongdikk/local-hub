@@ -24,7 +24,12 @@ export const useBoardStore = defineStore(
       // 게시글 목록 조회
       async loadPosts(params = {}) {
         const response = await getPosts(params)
-        this.posts = response
+
+        console.log('store response:', response)
+
+        if (response.success) {
+          this.posts = response.data
+        }
       },
 
       // 게시글 작성
