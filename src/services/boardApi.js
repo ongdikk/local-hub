@@ -1,25 +1,6 @@
 import { success, fail } from './response'
 import api from './api'
 
-// 현재는 Mock Data
-// FastAPI 연결 시 이 파일 내부만 axios 요청으로 변경
-
-// 게시글 목록 조회
-// GET /api/posts
-// export async function getPosts(params = {}) {
-//   const response = await api.get('/api/posts', {
-//     params: {
-//       page: params.page ?? 1,
-//       limit: params.limit ?? 10,
-//       keyword: params.keyword ?? '',
-//       tag: params.tag ?? '',
-//     },
-//   })
-
-//   console.log('게시글 목록:', response.data)
-
-//   return response.data
-// }
 export async function getPosts(params = {}) {
   const { page = 1, limit = 10, keyword = '', tag = '' } = params
 
