@@ -6,9 +6,7 @@
       <!-- 카테고리 -->
 
       <div v-if="post.tags?.length" class="tags">
-        <span v-for="tag in post.tags" :key="tag" class="tag">
-          #{{ tag }}
-        </span>
+        <span v-for="tag in post.tags" :key="tag" class="tag"> #{{ tag }} </span>
       </div>
 
       <!-- 작성자 영역 -->
@@ -17,9 +15,7 @@
         <div class="avatar">👤</div>
 
         <div class="profile-info">
-          <div class="author">
-            익명
-          </div>
+          <div class="author">익명</div>
 
           <div class="date">
             {{ formatDate(post.created_at) }}
@@ -38,8 +34,7 @@
       </div>
 
       <div v-if="post.image_urls?.length" class="images">
-        <img v-for="image in post.image_urls"
-          :key="image" :src="image" class="image"/>
+        <img v-for="image in post.image_urls" :key="image" :src="image" class="image" />
       </div>
 
       <div class="divider"></div>
@@ -57,7 +52,6 @@
     <!-- 액션 영역 -->
 
     <div class="action-bar">
-      
       <div class="left-actions">
         <div class="action-item" @click="likePost" :class="{ active: liked }">
           {{ liked ? '❤️ 좋아요 취소' : '🤍 좋아요' }}
@@ -82,9 +76,7 @@
         </button> -->
       </div>
 
-      <div class="comment-count">
-        💬 댓글 {{ commentStore.comments.length }}
-      </div>
+      <div class="comment-count">💬 댓글 {{ commentStore.comments.length }}</div>
     </div>
 
     <div class="divider"></div>
@@ -147,12 +139,9 @@ const bookmarked = ref(false)
 //   await commentStore.loadComments(route.params.id)
 // })
 onMounted(async () => {
+  // await boardStore.increaseView(route.params.id)
 
-  await boardStore.increaseView(route.params.id)
-
-  post.value = await boardStore.fetchPost(
-    route.params.id
-  )
+  post.value = await boardStore.fetchPost(route.params.id)
 
   if (!post.value) {
     router.push('/board')
@@ -211,9 +200,7 @@ function closeModal() {
 async function likePost() {
   liked.value = !liked.value
 
-  const success = await boardStore.toggleLike(
-    route.params.id,
-  )
+  const success = await boardStore.toggleLike(route.params.id)
 
   if (success) {
     post.value = await boardStore.findPost(route.params.id)
@@ -223,10 +210,7 @@ async function likePost() {
 async function bookmarkPost() {
   bookmarked.value = !bookmarked.value
 
-  const success = await boardStore.toggleBookmark(
-    route.params.id,
-    bookmarked.value,
-  )
+  const success = await boardStore.toggleBookmark(route.params.id, bookmarked.value)
 
   if (success) {
     post.value = await boardStore.findPost(route.params.id)
@@ -439,7 +423,7 @@ async function addComment(content) {
 
   line-height: 1;
 
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .like:hover,
@@ -470,7 +454,7 @@ async function addComment(content) {
 
   font-weight: 600;
 
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .action-item:hover {

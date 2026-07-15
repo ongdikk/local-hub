@@ -5,21 +5,6 @@ import api from './api'
 // FastAPI 연결 시 이 파일 내부만 axios 요청으로 변경
 
 // 게시글 목록 조회
-// GET /api/posts
-// export async function getPosts(params = {}) {
-//   const response = await api.get('/api/posts', {
-//     params: {
-//       page: params.page ?? 1,
-//       limit: params.limit ?? 10,
-//       keyword: params.keyword ?? '',
-//       tag: params.tag ?? '',
-//     },
-//   })
-
-//   console.log('게시글 목록:', response.data)
-
-//   return response.data
-// }
 export async function getPosts(params = {}) {
   const { page = 1, limit = 10, keyword = '', tag = '' } = params
 
@@ -97,18 +82,13 @@ export async function createPost(data) {
 //   )
 // }
 export async function getPostById(id) {
-  const post = posts.find((post) => post.id === Number(id))
+  try {
+    const response = await api.get(`/api/posts/${id}`)
 
-  if (!post) {
-    return fail('게시글을 찾을 수 없습니다.')
+    return success(response.data, '게시글 조회 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '게시글 조회 실패')
   }
-
-  return success(
-    {
-      ...post,
-    },
-    '게시글 조회 성공',
-  )
 }
 
 // 게시글 수정
@@ -207,14 +187,12 @@ export async function toggleBookmark(id, bookmarked) {
   return success(post, '북마크 변경 성공')
 }
 
-export async function increaseView(id) {
-  const post = posts.find((post) => post.id === Number(id))
+// export async function increaseView(id) {
+//   try {
+//     const response = await api.post(`/api/posts/${id}/view`)
 
-  if (!post) {
-    return false
-  }
-
-  post.views += 1
-
-  return success(post, '조회수 증가 성공')
-}
+//     return success(response.data, '조회수 증가 성공')
+//   } catch (error) {
+//     return fail(error.response?.data?.message ?? '조회수 증가 실패')
+//   }
+// }
