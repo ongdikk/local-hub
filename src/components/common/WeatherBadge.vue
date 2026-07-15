@@ -102,4 +102,16 @@ onMounted(() => {
   visibility: visible;
   transform: translateY(0);
 }
+
+@media (max-width: 768px) {
+  .weather {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  /* hide tooltip on small screens to avoid covering content */
+  .tooltip {
+    display: none;
+  }
+}
 </style>

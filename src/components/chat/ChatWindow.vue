@@ -197,4 +197,32 @@ async function send() {
 
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .chat-window {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 20px;
+    width: calc(100% - 32px);
+    height: 320px;
+    border-radius: 12px;
+  }
+
+  .header {
+    padding: 12px;
+  }
+
+  .messages {
+    padding: 12px;
+  }
+
+  .input-area {
+    padding: 10px;
+  }
+
+  .input-area button {
+    padding: 0 12px;
+  }
+}
 </style>

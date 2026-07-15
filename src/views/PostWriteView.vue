@@ -13,7 +13,8 @@
         @keydown.enter.space="cancel"
         aria-label="뒤로가기"
       >
-        뒤로가기
+        <span class="bt-icon">◀</span>
+        <span class="bt-text">뒤로가기</span>
       </span>
     </div>
 
@@ -110,6 +111,16 @@ function cancel() {
   .write-card {
     padding: 18px;
     margin: 0 auto 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-text .bt-text {
+    display: none;
+  }
+
+  .back-text {
+    padding: 6px;
   }
 }
 </style>

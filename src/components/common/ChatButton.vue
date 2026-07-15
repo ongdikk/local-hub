@@ -20,7 +20,6 @@ defineEmits(['toggle'])
   position: fixed;
 
   right: 30px;
-
   bottom: 30px;
 
   width: 56px;
@@ -44,5 +43,15 @@ defineEmits(['toggle'])
 
 .chat-button:hover {
   transform: translateY(-3px);
+}
+
+@media (max-width: 480px) {
+  .chat-button {
+    right: 16px;
+    bottom: 90px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
 }
 </style>
