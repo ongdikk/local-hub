@@ -86,6 +86,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { parseToLocalDate } from '@/utils/date'
 
 import { useRouter, useRoute } from 'vue-router'
 
@@ -228,8 +229,9 @@ function formatDate(date) {
   if (!date) {
     return ''
   }
+  const d = parseToLocalDate(date)
 
-  return new Date(date).toLocaleString()
+  return d ? d.toLocaleString() : ''
 }
 
 async function addComment(content) {

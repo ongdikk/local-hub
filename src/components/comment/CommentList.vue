@@ -23,19 +23,20 @@
 </template>
 
 <script setup>
+import { parseToLocalDate } from '@/utils/date'
+
 defineProps({
   comments: {
     type: Array,
     default: () => [],
   },
 })
-
 function formatDate(date) {
-  if (!date) {
-    return ''
-  }
+  if (!date) return ''
 
-  return new Date(date).toLocaleString()
+  const d = parseToLocalDate(date)
+
+  return d ? d.toLocaleString() : ''
 }
 </script>
 
