@@ -5,7 +5,12 @@
         {{ title }}
       </h3>
 
-      <input v-model="password" type="password" placeholder="비밀번호 입력" />
+      <input
+        v-model="password"
+        type="password"
+        placeholder="비밀번호 입력"
+        @keyup.enter="confirm"
+      />
 
       <div class="buttons">
         <button @click="confirm">확인</button>

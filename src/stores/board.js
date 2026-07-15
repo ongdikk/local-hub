@@ -25,8 +25,6 @@ export const useBoardStore = defineStore(
       async loadPosts(params = {}) {
         const response = await getPosts(params)
 
-        console.log('store response:', response)
-
         if (response.success) {
           this.posts = response.data
         }
@@ -82,8 +80,8 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 삭제
-      async removePost(id) {
-        const response = await deletePost(id)
+      async removePost(id, password) {
+        const response = await deletePost(id, password)
 
         if (!response.success) {
           return false

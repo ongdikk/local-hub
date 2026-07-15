@@ -151,28 +151,30 @@ function deletePost() {
 }
 
 async function confirmPassword(password) {
-  const result = await boardStore.checkPostPassword(
-    route.params.id,
+  console.log('confirmPassword - action:', actionType.value, 'password:', password)
 
-    password,
-  )
+  // 삭제의 경우 서버가 DELETE /api/posts/{id}에 { password }를 요구하므로 바로 호출
+  if (actionType.value === 'delete') {
+    const success = await boardStore.removePost(route.params.id, String(password))
 
-  if (!result) {
-    alert('비밀번호가 일치하지 않습니다.')
+    if (!success) {
+      alert('비밀번호가 일치하지 않거나 삭제에 실패했습니다.')
+
+      return
+    }
+
+    closeModal()
+
+    router.push('/board')
 
     return
   }
 
-  closeModal()
-
+  // 수정은 검증 엔드포인트가 없을 수 있으므로 편의상 바로 편집 페이지로 이동
   if (actionType.value === 'edit') {
+    closeModal()
+
     router.push(`/edit/${route.params.id}`)
-  }
-
-  if (actionType.value === 'delete') {
-    await boardStore.removePost(route.params.id)
-
-    router.push('/board')
   }
 }
 
