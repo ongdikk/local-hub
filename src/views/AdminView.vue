@@ -1,4 +1,6 @@
 <template>
+  <Header />
+  
   <div class="admin-dashboard">
     <div class="admin-header">
       <h2>데이터 적재 관리자 패널</h2>
@@ -101,6 +103,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { loadTourData } from '@/services/adminApi';
+import Header from '@/components/common/Header.vue';
 
 const fileInputRef = ref(null);
 const selectedFiles = ref([]);
