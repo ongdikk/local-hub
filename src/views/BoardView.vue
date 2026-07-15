@@ -16,7 +16,9 @@
 
     <WriteButton />
 
-    <ChatButton />
+    <ChatButton :opened="showChat" @toggle="showChat = !showChat"/>
+
+    <ChatWindow v-if="showChat" @close="showChat=false"/>
   </AppContainer>
 </template>
 
@@ -29,7 +31,7 @@ import PostList from '@/components/board/PostList.vue'
 import CategoryTabs from '@/components/board/CategoryTabs.vue'
 import WriteButton from '@/components/common/WriteButton.vue'
 import ChatButton from '@/components/common/ChatButton.vue'
-
+import ChatWindow from '@/components/chat/ChatWindow.vue'
 import { useBoardStore } from '@/stores/board'
 
 const boardStore = useBoardStore()
@@ -37,6 +39,8 @@ const boardStore = useBoardStore()
 const keyword = ref('')
 
 const selectedTag = ref('전체')
+
+const showChat = ref(false)
 
 onMounted(() => {
   loadPosts()

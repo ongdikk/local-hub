@@ -1,13 +1,18 @@
 <template>
-  <button class="chat-button" @click="openChat">
-    <span> ✨ </span>
+  <button class="chat-button" @click="$emit('toggle')">
+    {{ opened ? '✕' : '✨' }}
   </button>
 </template>
 
 <script setup>
-function openChat() {
-  alert('AI 챗봇 준비중입니다.')
-}
+defineProps({
+  opened: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+defineEmits(['toggle'])
 </script>
 
 <style scoped>
@@ -39,19 +44,5 @@ function openChat() {
 
 .chat-button:hover {
   transform: translateY(-3px);
-}
-
-@media (max-width: 768px) {
-  .chat-button {
-    right: 20px;
-
-    bottom: 20px;
-
-    width: 52px;
-
-    height: 52px;
-
-    font-size: 22px;
-  }
 }
 </style>
