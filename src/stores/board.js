@@ -118,20 +118,14 @@ export const useBoardStore = defineStore(
       },
 
       // 북마크 토글
-      async toggleBookmark(id, bookmarked) {
-        const response = await toggleBookmark(id, bookmarked)
+      async toggleBookmark(id) {
+        const response = await toggleBookmark(id)
 
         if (!response.success) {
           return false
         }
 
-        const index = this.posts.findIndex((post) => post.id === Number(id))
-
-        if (index !== -1) {
-          this.posts[index] = response.data
-        }
-
-        return true
+        return response.data
       },
 
       // 조회수 증가

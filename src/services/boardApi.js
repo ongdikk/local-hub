@@ -167,20 +167,20 @@ export async function toggleLike(id, liked) {
   }
 }
 
-export async function toggleBookmark(id, bookmarked) {
-  const post = posts.find((post) => post.id === Number(id))
+// 북마크 토글
+// POST /api/posts/{post_id}/bookmark
+export async function toggleBookmark(id) {
+  try {
+    const response = await api.post(`/api/posts/${id}/bookmark`, 'string', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-  if (!post) {
-    return false
+    return success(response.data, '북마크 변경 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '북마크 변경 실패')
   }
-
-  if (bookmarked) {
-    post.bookmarks += 1
-  } else {
-    post.bookmarks -= 1
-  }
-
-  return success(post, '북마크 변경 성공')
 }
 
 // export async function increaseView(id) {

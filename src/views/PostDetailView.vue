@@ -211,12 +211,27 @@ async function likePost() {
 }
 
 async function bookmarkPost() {
+  const previous = Number(post.value.bookmarks ?? 0)
+
   bookmarked.value = !bookmarked.value
 
-  const success = await boardStore.toggleBookmark(route.params.id, bookmarked.value)
+  // 즉시 변경
+  post.value.bookmarks = previous + (bookmarked.value ? 1 : -1)
 
-  if (success) {
-    post.value = await boardStore.findPost(route.params.id)
+  const result = await boardStore.toggleBookmark(route.params.id)
+
+  if (!result) {
+    // 실패 복구
+    post.value.bookmarks = previous
+
+    bookmarked.value = !bookmarked.value
+
+    return
+  }
+
+  // 서버 응답 반영
+  if (result.bookmarks !== undefined) {
+    post.value.bookmarks = result.bookmarks
   }
 }
 
