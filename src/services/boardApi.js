@@ -56,7 +56,7 @@ export async function createPost(data) {
 
     console.log('API 응답', response)
 
-    console.log('현재 posts:', posts)
+    // 서버에서 생성된 post id만 반환하는 구조를 기대함
 
     return success(response.data, '게시글 작성 성공')
   } catch (error) {
@@ -171,11 +171,7 @@ export async function toggleLike(id, liked) {
 // POST /api/posts/{post_id}/bookmark
 export async function toggleBookmark(id) {
   try {
-    const response = await api.post(`/api/posts/${id}/bookmark`, 'string', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    const response = await api.post(`/api/posts/${id}/bookmark`, 'string')
 
     return success(response.data, '북마크 변경 성공')
   } catch (error) {
