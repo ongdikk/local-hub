@@ -12,6 +12,8 @@ import {
   // increaseView,
 } from '@/services/boardApi'
 
+import { parseToLocalDate } from '@/utils/date'
+
 export const useBoardStore = defineStore(
   'board',
 
@@ -25,10 +27,18 @@ export const useBoardStore = defineStore(
       async loadPosts(params = {}) {
         const response = await getPosts(params)
 
-        console.log('store response:', response)
-
         if (response.success) {
-          this.posts = response.data
+          const data = Array.isArray(response.data) ? response.data : []
+
+          // 정렬: 최신 글이 위로 오도록 created_at 내림차순
+          data.sort((a, b) => {
+            const da = a.created_at ? parseToLocalDate(a.created_at).getTime() : 0
+            const db = b.created_at ? parseToLocalDate(b.created_at).getTime() : 0
+
+            return db - da
+          })
+
+          this.posts = data
         }
       },
 
@@ -82,8 +92,8 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 삭제
-      async removePost(id) {
-        const response = await deletePost(id)
+      async removePost(id, password) {
+        const response = await deletePost(id, password)
 
         if (!response.success) {
           return false

@@ -9,7 +9,5 @@ export async function getWeather(region = '구미') {
     },
   })
 
-  console.log(response.data)
-
   return response.data
 }

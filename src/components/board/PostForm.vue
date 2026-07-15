@@ -3,14 +3,17 @@
     <BaseInput v-model="form.title" placeholder="제목을 입력하세요" />
 
     <div class="tag-section">
-      <div class="label">
-        카테고리
-      </div>
+      <div class="label">카테고리</div>
 
       <div class="tag-list">
-        <button v-for="tag in tagOptions" :key="tag" type="button"
-          class="tag-chip" :class="{ active: form.tags.includes(tag) }"
-          @click="toggleTag(tag)">
+        <button
+          v-for="tag in tagOptions"
+          :key="tag"
+          type="button"
+          class="tag-chip"
+          :class="{ active: form.tags.includes(tag) }"
+          @click="toggleTag(tag)"
+        >
           #{{ tag }}
         </button>
       </div>
@@ -42,16 +45,7 @@ import BaseInput from '@/components/common/BaseInput.vue'
 
 import BaseButton from '@/components/common/BaseButton.vue'
 
-const tagOptions = [
-  '맛집',
-  '카페',
-  '관광',
-  '생활',
-  '질문',
-  '축제',
-  '교통',
-  '숙박',
-]
+const tagOptions = ['맛집', '카페', '관광', '생활', '질문', '축제', '교통', '숙박']
 
 const props = defineProps({
   initialData: {
@@ -106,8 +100,6 @@ watch(
 )
 
 function submit() {
-  console.log('PostForm submit', form)
-
   emit(
     'submit',
 
@@ -176,7 +168,7 @@ function toggleTag(tag) {
 
   cursor: pointer;
 
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .tag-chip:hover {

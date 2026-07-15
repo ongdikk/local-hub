@@ -14,8 +14,6 @@ export const useWeatherStore = defineStore(
       async loadWeather(region = '구미') {
         const response = await getWeather(region)
 
-        console.log('날씨 응답:', response)
-
         this.weather = response
       },
     },

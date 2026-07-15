@@ -18,12 +18,8 @@ export async function getPosts(params = {}) {
       },
     })
 
-    console.log('게시글 목록 API 응답:', response.data)
-
     return success(response.data, '게시글 목록 조회 성공')
   } catch (error) {
-    console.log('게시글 목록 조회 실패:', error)
-
     return fail(error.response?.data?.message ?? '게시글 조회 실패')
   }
 }
@@ -49,19 +45,13 @@ export async function getPosts(params = {}) {
 //   return success(newPost, '게시글 작성 성공')
 // }
 export async function createPost(data) {
-  console.log('createPost 호출됨', data)
-
   try {
     const response = await api.post('/api/posts', data)
-
-    console.log('API 응답', response)
 
     // 서버에서 생성된 post id만 반환하는 구조를 기대함
 
     return success(response.data, '게시글 작성 성공')
   } catch (error) {
-    console.log('API 오류', error)
-
     return fail(error.response?.data?.message ?? '게시글 작성 실패')
   }
 }
@@ -94,65 +84,55 @@ export async function getPostById(id) {
 // 게시글 수정
 // PUT /api/posts/{id}
 export async function updatePost(id, data) {
-  const index = posts.findIndex((post) => post.id === Number(id))
+  try {
+    const response = await api.put(`/api/posts/${id}`, data)
 
-  if (index === -1) {
-    return fail('수정할 게시글이 없습니다.')
+    return success(response.data, '게시글 수정 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '게시글 수정 실패')
   }
-
-  posts[index] = {
-    ...posts[index],
-
-    title: data.title,
-
-    content: data.content,
-  }
-
-  return success(
-    posts[index],
-
-    '게시글 수정 성공',
-  )
 }
 
 // 게시글 삭제
 // DELETE /api/posts/{id}
-export async function deletePost(id) {
-  const index = posts.findIndex((post) => post.id === Number(id))
+export async function deletePost(id, password) {
+  try {
+    // axios delete with body: pass { data: ... }
+    const response = await api.delete(`/api/posts/${id}`, { data: { password } })
 
-  if (index === -1) {
-    return fail('삭제할 게시글이 없습니다.')
+    return success(response.data ?? true, '게시글 삭제 성공')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '게시글 삭제 실패')
   }
-
-  posts.splice(
-    index,
-
-    1,
-  )
-
-  return success(
-    true,
-
-    '게시글 삭제 성공',
-  )
 }
 
 // 비밀번호 확인
 // POST /api/posts/{id}/verify
 export async function checkPassword(id, password) {
-  const post = posts.find((post) => post.id === Number(id))
+  try {
+    const response = await api.post(`/api/posts/${id}/verify`, { password })
 
-  if (!post) {
-    return fail('게시글이 없습니다.')
+    // 서버가 { verified: boolean } 또는 boolean 을 반환한다고 가정
+    const data = response.data
+
+    console.log('checkPassword API response:', data)
+
+    // 다양한 형태 대응: boolean, { verified }, { valid }, { success }, { result }, 숫자(1/0)
+    let verified = false
+
+    if (typeof data === 'boolean') {
+      verified = data
+    } else if (typeof data === 'number') {
+      verified = data === 1
+    } else if (data && typeof data === 'object') {
+      verified = !!(data.verified ?? data.valid ?? data.success ?? data.result ?? data)
+    } else {
+      verified = Boolean(data)
+    }
+    return success(verified, '비밀번호 확인 완료')
+  } catch (error) {
+    return fail(error.response?.data?.message ?? '비밀번호 확인 실패')
   }
-
-  const result = post.password === password
-
-  return success(
-    result,
-
-    '비밀번호 확인 완료',
-  )
 }
 
 // 좋아요 토글
