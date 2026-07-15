@@ -14,17 +14,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const tagOptions = [
-  '전체',
-  '맛집',
-  '카페',
-  '관광',
-  '생활',
-  '질문',
-  '축제',
-  '교통',
-  '숙박',
-]
+const tagOptions = ['전체', '맛집', '카페', '관광', '생활', '질문', '축제', '교통', '숙박']
 
 const selected = ref('전체')
 
@@ -53,7 +43,7 @@ button {
   font-size: 14px;
   white-space: nowrap;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 button:hover {

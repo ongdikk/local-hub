@@ -36,35 +36,6 @@ const messages = ref([
   },
 ])
 
-// function send(){
-
-//   if(!input.value.trim()) return
-
-//   messages.value.push({
-
-//     role:'user',
-
-//     content:input.value
-
-//   })
-
-//   // 임시 응답
-//   setTimeout(()=>{
-
-//     messages.value.push({
-
-//       role:'bot',
-
-//       content:'답변을 준비하고 있습니다.'
-
-//     })
-
-//   },500)
-
-//   input.value=''
-
-// }
-
 async function send() {
   if (!input.value.trim()) return
 
@@ -72,17 +43,20 @@ async function send() {
 
   messages.value.push({
     role: 'user',
-
     content: userMessage,
   })
 
   input.value = ''
 
-  const response = await sendChat(userMessage, messages.value)
+  const history = messages.value.map((message) => ({
+    role: message.role,
+    content: message.content,
+  }))
+
+  const response = await sendChat(userMessage, history)
 
   messages.value.push({
     role: 'bot',
-
     content: response.reply,
   })
 }
