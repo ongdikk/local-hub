@@ -2,6 +2,17 @@
   <Header />
 
   <div class="container" v-if="post">
+    <div class="top-actions-row">
+      <div class="top-left">
+        <BaseButton @click="goBoard">목록</BaseButton>
+      </div>
+
+      <div class="top-right">
+        <BaseButton @click="editPost">수정</BaseButton>
+        <BaseButton @click="deletePost">삭제</BaseButton>
+      </div>
+    </div>
+
     <article class="card">
       <!-- 카테고리 -->
 
@@ -39,14 +50,7 @@
 
       <div class="divider"></div>
 
-      <!-- 버튼 -->
-      <div class="button-group">
-        <BaseButton @click="goBoard"> 목록 </BaseButton>
-
-        <BaseButton @click="editPost"> 수정 </BaseButton>
-
-        <BaseButton @click="deletePost"> 삭제 </BaseButton>
-      </div>
+      <!-- 버튼: 상단으로 이동 -->
     </article>
 
     <!-- 액션 영역 -->
@@ -377,6 +381,21 @@ async function addComment(content) {
 .button-group {
   display: flex;
   gap: 12px;
+}
+
+.top-actions-row {
+  max-width: 900px;
+  margin: 16px auto 0;
+  padding: 0 32px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-right {
+  display: flex;
+  gap: 8px;
 }
 
 /* ---------- 액션바 ---------- */
