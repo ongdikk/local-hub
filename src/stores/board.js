@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 import {
   getPosts,
+  getPostById,
   createPost,
   updatePost,
   deletePost,
@@ -41,8 +42,17 @@ export const useBoardStore = defineStore(
       },
 
       // 게시글 상세 조회
-      async findPost(id) {
-        return this.posts.find((post) => post.id === Number(id))
+      // async findPost(id) {
+      //   return this.posts.find((post) => post.id === Number(id))
+      // },
+      async fetchPost(id) {
+        const response = await getPostById(id)
+
+        if (!response.success) {
+          return null
+        }
+
+        return response.data
       },
 
       // 게시글 수정

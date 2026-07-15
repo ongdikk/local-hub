@@ -4,7 +4,7 @@
   <AppContainer>
     <h2>게시글 수정</h2>
 
-    <PostForm :initialData="post" buttonText="수정하기" @submit="update" @cancel="cancel" />
+    <PostForm :initialData="post" buttonText="수정하기" :showPassword="true" @submit="update" @cancel="cancel" />
   </AppContainer>
 </template>
 

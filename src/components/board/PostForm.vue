@@ -117,6 +117,8 @@ function submit() {
       password: form.password,
 
       tags: form.tags,
+
+      image_urls: [],
     },
   )
 }

@@ -137,11 +137,26 @@ const commentStore = useCommentStore()
 
 const bookmarked = ref(false)
 
+// onMounted(async () => {
+//   post.value = await boardStore.findPost(route.params.id)
+
+//   if (!post.value) {
+//     router.push('/board')
+//   }
+
+//   await commentStore.loadComments(route.params.id)
+// })
 onMounted(async () => {
-  post.value = await boardStore.findPost(route.params.id)
+
+  await boardStore.increaseView(route.params.id)
+
+  post.value = await boardStore.fetchPost(
+    route.params.id
+  )
 
   if (!post.value) {
     router.push('/board')
+    return
   }
 
   await commentStore.loadComments(route.params.id)

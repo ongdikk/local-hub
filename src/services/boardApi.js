@@ -127,6 +127,19 @@ export async function createPost(data) {
 
 // 게시글 상세 조회
 // GET /api/posts/{id}
+// export async function getPostById(id) {
+//   const post = posts.find((post) => post.id === Number(id))
+
+//   if (!post) {
+//     return fail('게시글을 찾을 수 없습니다.')
+//   }
+
+//   return success(
+//     post,
+
+//     '게시글 조회 성공',
+//   )
+// }
 export async function getPostById(id) {
   const post = posts.find((post) => post.id === Number(id))
 
@@ -135,8 +148,9 @@ export async function getPostById(id) {
   }
 
   return success(
-    post,
-
+    {
+      ...post,
+    },
     '게시글 조회 성공',
   )
 }
