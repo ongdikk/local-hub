@@ -54,6 +54,20 @@
         <img v-for="image in post.image_urls" :key="image" :src="image" class="image" />
       </div>
 
+      <div class="store-section">
+        <h2 class="section-title">맛집</h2>
+
+        <div v-if="stores.length" class="stores-grid">
+          <StoreCard
+            v-for="(store, idx) in stores"
+            :key="(store.title || '') + String(store.mapx) + idx"
+            :store="store"
+          />
+        </div>
+
+        <div v-else class="no-stores">맛집 정보가 없습니다.</div>
+      </div>
+
       <div class="divider"></div>
 
       <!-- 버튼: 상단으로 이동 -->
@@ -95,7 +109,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { parseToLocalDate } from '@/utils/date'
 
 import { useRouter, useRoute } from 'vue-router'
@@ -114,6 +128,8 @@ import CommentInput from '@/components/comment/CommentInput.vue'
 
 import { useCommentStore } from '@/stores/comment'
 
+import StoreCard from '@/components/common/StoreCard.vue'
+
 const router = useRouter()
 
 const route = useRoute()
@@ -121,6 +137,8 @@ const route = useRoute()
 const boardStore = useBoardStore()
 
 const post = ref(null)
+
+const stores = computed(() => post.value?.matched_stores ?? post.value?.matchedStores ?? [])
 
 const showPasswordModal = ref(false)
 
@@ -140,7 +158,9 @@ onMounted(async () => {
     return
   }
 
-  liked.value = post.value.likes > 0
+  console.log('PostDetail fetched post:', post.value)
+
+  liked.value = (post.value?.likes ?? 0) > 0
 
   await commentStore.loadComments(route.params.id)
 })
@@ -681,5 +701,56 @@ async function addComment(content) {
     width: 100%;
     justify-content: flex-end;
   }
+}
+/* ---------- 매칭된 맛집 섹션 ---------- */
+.store-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #0b1220;
+}
+
+.stores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 12px;
+  justify-content: start;
+  justify-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .stores-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .stores-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .store-section {
+    margin-top: 14px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+}
+
+.no-stores {
+  padding: 14px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #6b7280;
+  font-size: 14px;
 }
 </style>
