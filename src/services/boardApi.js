@@ -128,6 +128,21 @@ export async function toggleBookmark(id) {
   }
 }
 
+// 이미지 업로드
+export async function uploadImage(file) {
+  try {
+    const form = new FormData()
+    form.append('file', file)
+    const response = await api.post('/api/uploads', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    // 서버가 { url: "/static/uploads/..." } 를 반환한다고 가정
+    return success(response.data.url, '이미지 업로드 성공')
+  } catch (err) {
+    return fail(err.response?.data?.detail ?? '이미지 업로드 실패')
+  }
+}
+
 // export async function increaseView(id) {
 //   try {
 //     const response = await api.post(`/api/posts/${id}/view`)

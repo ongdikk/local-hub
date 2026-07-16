@@ -28,6 +28,19 @@
       placeholder="수정 비밀번호"
     />
 
+    <!-- 이미지 선택 및 미리보기 -->
+    <div class="image-upload">
+      <label class="label">이미지 첨부</label>
+      <input type="file" accept="image/*" multiple @change="onFilesSelected" />
+
+      <div class="previews" v-if="previews.length">
+        <div v-for="(p, i) in previews" :key="p" class="preview-item">
+          <img :src="p" class="preview-img" />
+          <button type="button" @click="removeFile(i)">삭제</button>
+        </div>
+      </div>
+    </div>
+
     <div class="buttons">
       <BaseButton @click="submit">
         {{ buttonText }}
@@ -39,11 +52,13 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue'
+import { reactive, watch, ref } from 'vue'
 
 import BaseInput from '@/components/common/BaseInput.vue'
 
 import BaseButton from '@/components/common/BaseButton.vue'
+
+import { uploadImage } from '@/services/boardApi'
 
 const tagOptions = ['맛집', '카페', '관광', '생활', '질문', '축제', '교통', '숙박']
 
@@ -79,6 +94,12 @@ const form = reactive({
   password: '',
 })
 
+// 파일 선택 및 미리보기
+const selectedFiles = ref([])
+const previews = ref([])
+// 기존에 서버에 저장된 이미지 URL들 (편집 시 유지용)
+const existingImageUrls = ref([])
+
 watch(
   () => props.initialData,
 
@@ -92,6 +113,12 @@ watch(
     form.content = value.content ?? ''
 
     form.password = value.password ?? ''
+    // 초기 데이터에 image_urls가 있으면 previews와 existingImageUrls에 추가
+    if (value.image_urls && Array.isArray(value.image_urls)) {
+      existingImageUrls.value = [...value.image_urls]
+      // add to previews so UI shows them
+      previews.value = [...previews.value, ...value.image_urls]
+    }
   },
 
   {
@@ -100,21 +127,27 @@ watch(
 )
 
 function submit() {
-  emit(
-    'submit',
+  ;(async () => {
+    let image_urls = []
 
-    {
+    if (selectedFiles.value.length > 0) {
+      const results = await Promise.all(
+        selectedFiles.value.map((f) => uploadImage(f)),
+      )
+      image_urls = results.filter((r) => r && r.success).map((r) => r.data)
+    }
+
+    // include existingImageUrls (from initialData) + newly uploaded image_urls
+    const all_image_urls = [...existingImageUrls.value, ...image_urls]
+
+    emit('submit', {
       title: form.title,
-
       content: form.content,
-
       password: form.password,
-
       tags: form.tags,
-
-      image_urls: [],
-    },
-  )
+      image_urls: all_image_urls,
+    })
+  })()
 }
 
 function cancel() {
@@ -129,6 +162,42 @@ function toggleTag(tag) {
   } else {
     form.tags.splice(index, 1)
   }
+}
+
+function onFilesSelected(e) {
+  const files = Array.from(e.target.files || [])
+  files.forEach((f) => {
+    // optional: size/type checks
+    selectedFiles.value.push(f)
+    previews.value.push(URL.createObjectURL(f))
+  })
+  e.target.value = ''
+}
+
+function removeFile(index) {
+  const url = previews.value[index]
+  // if this preview corresponds to an existing remote URL, remove from existingImageUrls
+  const existingIdx = existingImageUrls.value.indexOf(url)
+  if (existingIdx !== -1) {
+    existingImageUrls.value.splice(existingIdx, 1)
+    previews.value.splice(index, 1)
+    return
+  }
+
+  // otherwise it's a local blob URL linked to selectedFiles
+  if (url) URL.revokeObjectURL(url)
+
+  // find corresponding selected file by matching objectURL
+  // we don't have a direct mapping, so remove by index: assume previews and selectedFiles kept in same order for blobs
+  // Count how many previews before index are blob URLs to compute selectedFiles index
+  let blobCount = 0
+  for (let i = 0; i < index; i++) {
+    if (!existingImageUrls.value.includes(previews.value[i])) blobCount++
+  }
+
+  // remove the selected file at blobCount
+  if (selectedFiles.value[blobCount]) selectedFiles.value.splice(blobCount, 1)
+  previews.value.splice(index, 1)
 }
 </script>
 

@@ -87,7 +87,8 @@ const mapHref = computed(() => {
 
 /* fixed desktop card width */
 .store-card {
-  width: 340px;
+  /* width: 340px; */
+  width: 100%;
 }
 
 .image-wrap {

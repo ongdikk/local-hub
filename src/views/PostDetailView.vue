@@ -51,12 +51,15 @@
       </div>
 
       <div v-if="post.image_urls?.length" class="images">
-        <img v-for="image in post.image_urls" :key="image" :src="image" class="image" />
+        <img 
+          v-for="image in post.image_urls" 
+          :key="image" 
+          :src="`${apiUrl}${image}`" 
+          class="image" 
+        />
       </div>
 
       <div class="store-section">
-        <h2 class="section-title">맛집</h2>
-
         <div v-if="stores.length" class="stores-grid">
           <StoreCard
             v-for="(store, idx) in stores"
@@ -64,8 +67,6 @@
             :store="store"
           />
         </div>
-
-        <div v-else class="no-stores">맛집 정보가 없습니다.</div>
       </div>
 
       <div class="divider"></div>
@@ -129,6 +130,7 @@ import CommentInput from '@/components/comment/CommentInput.vue'
 import { useCommentStore } from '@/stores/comment'
 
 import StoreCard from '@/components/common/StoreCard.vue'
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const router = useRouter()
 
@@ -367,7 +369,7 @@ async function addComment(content) {
 /* ---------- 본문 ---------- */
 
 .content {
-  min-height: 250px;
+  /* min-height: 250px; */
 
   line-height: 1.8;
 
@@ -387,7 +389,7 @@ async function addComment(content) {
 }
 
 .image {
-  width: 180px;
+  width: 100%;
 
   border-radius: 12px;
 }
